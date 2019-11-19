@@ -4,8 +4,7 @@ Theo Taupiac
 
 Reminder :
     
-    A CODER :
-        
+    lancer data_reconstruction en amont
         
         
 """
@@ -25,6 +24,10 @@ import time
 
 threshold = 2
 
+pilot_names = ["/1211_Guilhem_gauche","/1211_maxime_droite","/1211_simon_droite","/1211_natan_gauche",]
+# voir si on code pour utiliser les 100ms
+choix_pilote = 0
+
 ###############################################################################
 #########################       FUNCTIONS        ##############################
 ###############################################################################
@@ -35,26 +38,49 @@ def my_read_csv(filename):
 ###############################################################################
 #################      OPENING CSV AND COLUMNS NAMES       ####################
 ###############################################################################
+
+#   BUG
+#filename = "/Users/theo_taupiac/Desktop/PIE 0018" + pilot_names[choix_pilote] + "/" +"numData_10ms_.csv"
+#dataFlight = my_read_csv("/Users/theo_taupiac/Desktop/PIE 0018" + filename)
     
-dataFlight = my_read_csv("table_test_100ms.csv")
-dataFlight = dataFlight.drop_duplicates()
+####### Opening CSV  
+
+dataFlight = my_read_csv("numData_10ms_.csv")
+
+# Cette étape fait office de passage a 100ms pour le moment
+dataFlight = dataFlight.drop_duplicates(subset = "FD_PILOT_HEAD_HEADING" )
 dataFlight = dataFlight.reset_index(drop = True)
 
-Position_name = ["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_ROLL","FD_PILOT_HEAD_PITCH"]
+#Verification avec les time\
+"""
+liste_des_ecarts_temporels = []
+for k in range(len(dataFlight)-1):
+    liste_des_ecarts_temporels += [(dataFlight.loc[k+1,'FD_TIME_MS']-dataFlight.loc[k,'FD_TIME_MS'])]
+max(liste_des_ecarts_temporels)
+min(liste_des_ecarts_temporels)
+np.mean(liste_des_ecarts_temporels)
+plt.boxplot(liste_des_ecarts_temporels)
+Plt.grid()
+"""
+####### Columns names
+
+### POSITION
+Position_name = ["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_ROLL_X","FD_PILOT_HEAD_PITCH"]
 
 ### TIME
-Speed_name = ["FD_PILOT_speed_HEAD_HEADING","FD_PILOT_speed_HEAD_ROLL","FD_PILOT_speed_HEAD_PITCH"]
-Acc_name = ["FD_PILOT_acc_HEAD_HEADING","FD_PILOT_acc_HEAD_ROLL","FD_PILOT_acc_HEAD_PITCH"]
-Jerk_name = ["FD_PILOT_jerk_HEAD_HEADING","FD_PILOT_jerk_HEAD_ROLL","FD_PILOT_jerk_HEAD_PITCH"]
+Speed_name = ["FD_PILOT_speed_HEAD_HEADING","FD_PILOT_speed_HEAD_ROLL_X","FD_PILOT_speed_HEAD_PITCH"]
+Acc_name = ["FD_PILOT_acc_HEAD_HEADING","FD_PILOT_acc_HEAD_ROLL_X","FD_PILOT_acc_HEAD_PITCH"]
+Jerk_name = ["FD_PILOT_jerk_HEAD_HEADING","FD_PILOT_jerk_HEAD_ROLL_X","FD_PILOT_jerk_HEAD_PITCH"]
 
 ### FFT
-FFT_Speed_name = ["FD_PILOT_FFT_speed_HEAD_HEADING","FD_PILOT_FFT_speed_HEAD_ROLL","FD_PILOT_FFT_speed_HEAD_PITCH"]
-FFT_Acc_name = ["FD_PILOT_FFT_acc_HEAD_HEADING","FD_PILOT_FFT_acc_HEAD_ROLL","FD_PILOT_FFT_acc_HEAD_PITCH"]
-FFT_Jerk_name = ["FD_PILOT_FFT_jerk_HEAD_HEADING","FD_PILOT_FFT_jerk_HEAD_ROLL","FD_PILOT_FFT_jerk_HEAD_PITCH"]
+FFT_Speed_name = ["FD_PILOT_FFT_speed_HEAD_HEADING","FD_PILOT_FFT_speed_HEAD_ROLL_X","FD_PILOT_FFT_speed_HEAD_PITCH"]
+FFT_Acc_name = ["FD_PILOT_FFT_acc_HEAD_HEADING","FD_PILOT_FFT_acc_HEAD_ROLL_X","FD_PILOT_FFT_acc_HEAD_PITCH"]
+FFT_Jerk_name = ["FD_PILOT_FFT_jerk_HEAD_HEADING","FD_PILOT_FFT_jerk_HEAD_ROLL_X","FD_PILOT_FFT_jerk_HEAD_PITCH"]
 
-### Changement du format
+####### Changement du format
+
 temp_col = dataFlight["FD_TIME_MS"]
-dataFlight = dataFlight.stack().str.replace(',','.').unstack()
+#dataFlight = dataFlight.stack().str.replace(',','.').unstack()
 dataFlight[Position_name[0]] = dataFlight[Position_name[0]].astype(float)
 dataFlight[Position_name[1]] = dataFlight[Position_name[1]].astype(float)
 dataFlight[Position_name[2]] = dataFlight[Position_name[2]].astype(float)
@@ -82,7 +108,7 @@ for i in range(3) :
     dataFlight[Jerk_name[i]]=0
     for k in range (threshold, len(dataFlight)-threshold):
         dataFlight.loc[k,Jerk_name[i]] = (dataFlight.loc[k+threshold,Acc_name[i]]- dataFlight.loc[k-threshold,Acc_name[i]])/((dataFlight.loc[k+threshold,"FD_TIME_MS"]- dataFlight.loc[k-threshold,"FD_TIME_MS"])*0.001)
-
+"""
 #########    FFT
 ### SPEED
 for i in range(3) :
@@ -102,6 +128,7 @@ for i in range(3) :
     for k in range (threshold, len(dataFlight)-threshold):
         dataFlight.loc[k,Jerk_name[i]] = 
 
+"""
 """
 D'apres le travail de  "Anguita et al. (2013)", voici les datas et procedes appliques pour obtenir 561 variables.
 
