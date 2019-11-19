@@ -4,12 +4,13 @@ Created on Tue Nov 19 13:12:29 2019
 
 @author: natan
 """
+import PlanePhysics as pp
 
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-data_path = "d:/natan/Documents/PIE/Logs/1211_test_protocole/1211_maxime_droite"
+data_path = "d:/natan/Documents/PIE/Logs/1211_test_protocole/1211_Guilhem_gauche"
 
 data = pd.DataFrame()
 poi = pd.DataFrame()
@@ -22,10 +23,10 @@ xgreen, ygreen = [], []
 
 def init_animation():
     ax.set_xlim(-180, 180)
-    ax.set_ylim(-180, 180)
+    ax.set_ylim(-7.5, 1.5)
 
     ax.set_xlabel("Heading angle [°]")
-    ax.set_ylabel("Pitch angle [°]")
+    ax.set_ylabel("Pitch projection [m]")
     return [red, green]
 
 def update_animation(frame):
@@ -42,7 +43,7 @@ def update_animation(frame):
         xdata, ydata = xgreen, ygreen
 
     # Get point on cockpit glass
-    x, y = data.at[frame, "FD_PILOT_HEAD_HEADING"], data.at[frame, "FD_PILOT_HEAD_PITCH"]
+    x, y = data.at[frame, "FD_PILOT_HEAD_HEADING"], pp.project_pitch(data.at[frame, "FD_PILOT_HEAD_PITCH"])
     xdata.append(x)
     ydata.append(y)
 
