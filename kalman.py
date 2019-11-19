@@ -32,7 +32,17 @@ MAG0=XSENSE_MAGNETOMETER_.mean().to_numpy()
 ACC0=XSENSE_ACC.mean().to_numpy()
 GYR0=XSENSE_GYRO_.mean().to_numpy()
 
-kf = EKF(dim_x=4, dim_z=6)
+
+class EKF_cust(EKF):
+    def __init__(self, dt):
+        EKF.__init__(self,4,6)
+        self.dt = dt
+        
+    def predict(self, u=gyro):
+        self.x =prediction(self,gyro)[0]
+        self.P = prediction(self,gyro)[1]
+
+
 
 def sensor_reading(i):
     accx=XSENSE_ACC["FD_ACCX2"][i]
@@ -44,7 +54,7 @@ def sensor_reading(i):
     return np.array([accx,accy,accz,magx,magy,magz])
 
 
-def gyro(i):
+def gyro_measure(i):
     x=XSENSE_GYRO_["FD_GYRO_X2"][i]*math.pi/180
     y=XSENSE_GYRO_["FD_GYRO_Y2"][i]*math.pi/180
     z=XSENSE_GYRO_["FD_GYRO_Z2"][i]*math.pi/180
@@ -77,7 +87,7 @@ def Hjacobian(x):
     H=np.concatenate((Hacc,Hmag))
     return H
 
-def predict(kf,gyro):
+def prediction(kf,gyro):
     [p,q,r]=gyro
     DQ=np.array([[0,-p,-q,-r],[p,0,r,-q],[q,-r,0,p],[r,q,-p,0]]);
     A=np.eye(4)+0.5*dt*DQ
@@ -88,6 +98,7 @@ def predict(kf,gyro):
 
 
 ###INIT
+kf = EKF_cust(dt=dt)
 kf.x=np.array([[1.],[0.],[0.],[0.]])
 kf.P=1000.*np.eye(4)
 qa=0.01*0.01
@@ -100,13 +111,12 @@ dt=0.1
 
 track=[]
 ##KALMAN LOOP
-for i in range(len(data)):
-    [p,q,r]=gyro(i)
-    predicted=predict(kf,[p,q,r])
-    kf.x=predicted[0]
-    kf.P=predicted[1]
+for i in range(20):
+    gyro=gyro_measure(i)
+    [p,q,r]=gyro
+    kf.predict(u=gyro)
     z=sensor_reading(i)
     kf.update(z,HJacobian=Hjacobian,Hx=Hx)
-    track[i]=kf.x
+    track.append(kf.x)
     
 
