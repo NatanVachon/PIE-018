@@ -35,12 +35,17 @@ GYR0=XSENSE_GYRO_.mean().to_numpy()
 
 class EKF_cust(EKF):
     def __init__(self, dt):
-        EKF.__init__(self,4,6)
+        EKF.__init__(self,4,6,6)
         self.dt = dt
         
     def predict(self, u=gyro):
-        self.x =prediction(self,gyro)[0]
-        self.P = prediction(self,gyro)[1]
+        
+        [p,q,r]=gyro
+        DQ=np.array([[0,-p,-q,-r],[p,0,r,-q],[q,-r,0,p],[r,q,-p,0]]);
+        A=np.eye(4)+0.5*dt*DQ
+        self.x=A.dot(self.x)
+        self.P=np.eye(4).dot(self.P).dot(np.eye(4))+self.Q
+
 
 
 
@@ -72,13 +77,13 @@ def quat2M(q):
 #Measurment Matric
 def Hx(x):
     [qo,q1,q2,q3]=x
-    M=np.transpose(quat2M(np.transpose(kf.x)[0]))
+    M=np.transpose(quat2M(kf.x))
     Yhat =np.concatenate((M.dot(ACC0),M.dot(MAG0)))
     return Yhat
 
 #Jacobian Matrix
 def Hjacobian(x):
-    [qo,q1,q2,q3]=np.transpose(x)[0]
+    [qo,q1,q2,q3]=x
     J1=2*np.array([[q0,q1,-q2,-q3],[-q3,q2,q1,-q0],[q2,q3,q0,q1]])
     J2=2*np.array([[q3,q2,q1,q0],[q0,-q1,q2,-q3],[-q1,-q0,q3,q2]])
     J3=np.array([[-q2,q3,-q0,q1],[q1,q0,q3,q2],[q0,q1,q2,q3]])
@@ -87,19 +92,12 @@ def Hjacobian(x):
     H=np.concatenate((Hacc,Hmag))
     return H
 
-def prediction(kf,gyro):
-    [p,q,r]=gyro
-    DQ=np.array([[0,-p,-q,-r],[p,0,r,-q],[q,-r,0,p],[r,q,-p,0]]);
-    A=np.eye(4)+0.5*dt*DQ
-    X=A.dot(kf.x)
-    P=np.transpose(np.eye(4).dot(kf.P).dot(np.eye(4)))+kf.Q
-    return [X,P]
 
 
 
 ###INIT
 kf = EKF_cust(dt=dt)
-kf.x=np.array([[1.],[0.],[0.],[0.]])
+kf.x=np.array([1.,0.,0.,0.])
 kf.P=1000.*np.eye(4)
 qa=0.01*0.01
 kf.Q=np.diag([qa,qa,qa,qa])
@@ -117,6 +115,7 @@ for i in range(20):
     kf.predict(u=gyro)
     z=sensor_reading(i)
     kf.update(z,HJacobian=Hjacobian,Hx=Hx)
+    kf.x=kf.x/np.linalg.norm(kf.x)
     track.append(kf.x)
     
 
