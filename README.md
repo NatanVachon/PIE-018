@@ -2,3 +2,4 @@
 
 ## Raw code structure
 
+![Code structure](Images/Mise en forme des données.png)
