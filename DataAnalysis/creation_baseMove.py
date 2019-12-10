@@ -38,14 +38,15 @@ derive_cap = 2
 
 exec(open("/Users/theo_taupiac/Desktop/PIE_0018/creation_features.py").read()) 
 
-DataMove = pd.DataFrame( columns = ['turning_plane','turning_head'])
+DataMove = pd.DataFrame(columns = ['turning_plane','turning_head'])
 
 
 ###############################################################################
 ############################     FONCTIONS     ################################
 ###############################################################################
 
-### AVEC LE LACET POUR LINSTANT (FD_AHRS_HEADING)!! PROCHAINE MESURE BIEN CHOISIR LES DATA DANS 100ms
+### AVEC LE LACET POUR LINSTANT (FD_AHRS_HEADING)!! ce serait mieux avec le cap
+#-->  PROCHAINE MESURE BIEN CHOISIR LES DATA DANS 100ms
 # Donne la direction du virage a chaque instant du vol.
 
 """
@@ -123,6 +124,7 @@ PAS D'ORIENTATION POUR L'INSTANT
 """    
 def freq_head_turning(dm):
     nb_virage = 0
+    turn_side = []
     nb_turn = 0
     
     turning_plane = []
@@ -138,36 +140,61 @@ def freq_head_turning(dm):
         if abs(turn_plane.iloc[t+1].values) == 1 and turn_plane.iloc[t].values == 0:
             turning_plane.append(1)
             
-            if abs(turn_head.iloc[t+1].values) == 1 :
+            if turn_head.iloc[t+1].values == 1 :
                 turning_head.append([1])
+                
+            if turn_head.iloc[t+1].values == -1 :
+                turning_head.append([-1])  
+                
             else :
                 turning_head.append([0])
                 
         # VIRAGE QUI CONTINUE
-        if abs(turn_plane.iloc[t+1].values) == 1 and turn_plane.iloc[t].values == 1:
+        if abs(turn_plane.iloc[t+1].values) == 1 and abs(turn_plane.iloc[t].values) == 1:
             turning_plane[nb_virage] += 1
             
-            # LISTE DANS LA LISTE CONCERNANT LE VIRAGE EN COURS
-            if abs(turn_head.iloc[t+1].values) == 1 and turn_head.iloc[t].values == 1:
+            # TETE A DROITE
+            if turn_head.iloc[t+1].values == 1 and turn_head.iloc[t].values == 1:
                 turning_head[nb_virage][nb_turn] += 1
-            if abs(turn_head.iloc[t+1].values) == 1 and turn_head.iloc[t].values == 0:
+            if turn_head.iloc[t+1].values == 1 and turn_head.iloc[t].values == 0:
                 nb_turn += 1
                 turning_head[nb_virage].append(1)
+                
+             # TETE A GAUCHE
+            if turn_head.iloc[t+1].values == -1 and turn_head.iloc[t].values == -1:
+                turning_head[nb_virage][nb_turn] -= 1
+            if turn_head.iloc[t+1].values == -1 and turn_head.iloc[t].values == 0:
+                nb_turn += 1
+                turning_head[nb_virage].append(1)   
+                
+                
                 
         # FIN DE VIRAGE
         if turn_plane.iloc[t+1].values == 0 and abs(turn_plane.iloc[t].values) == 1 : 
             nb_virage += 1
+            if turn_plane.iloc[t].values == 1 :
+                turn_side.append("droite")
+            if turn_plane.iloc[t].values == -1 :
+                turn_side.append("gauche")
+         
+        
+        # ENLEVER LES ANOMALIES : IDEE : ajouter au tourner de tete precedent si temps tres court // enlever valeur < a 2 ou 3
+        
+        
 
     Frequence_tete = []
     
     #une valeur toutes les 0.1sec dans le tableau
     
     for k in range(len(turning_head)):
-        Frequence_tete.append(100*len(turning_head[k])/turning_plane[k])
+        Frequence_tete.append(0.1*turning_plane[k]/len(turning_head[k]))
 
 
-    print("La premiere valeur est le nombre de virages, le premier tableau correspond a chacune de leur duree, le dernier au temps ou la tete est tournee. La derniere valeur correspond au ratio des deux dernieres")
-    return(nb_virage,turning_plane,turning_head,Frequence_tete) 
+    print("Nombre de virages : ", nb_virage)
+    print("Coté de chaque virage : ", turn_side)
+    print("Duree de chaque virage : ",turning_plane)
+    print("Temps regard à l'exterieur",turning_head)
+    print("Temps moyen entre deux regards a l'exterieur pour chaque virage",Frequence_tete, " s") 
     
 #turning_plane,turning_head)    
     
