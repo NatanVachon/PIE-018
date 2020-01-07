@@ -42,8 +42,8 @@ print(transition) #transition = tableau des transitions
 
 
 #Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
-pfa.count_AOI(clean_aois,aois)
-
+stats_aoi=pfa.count_AOI(clean_aois,aois)
+print(stats_aoi)
 
 
 
