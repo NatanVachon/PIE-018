@@ -34,7 +34,7 @@ threshold = 2
 #########################       FUNCTION       ################################
 ###############################################################################
 
-def data_cleaner(data,threshold):
+def data_preprocessing(data,threshold):
     # Cette étape permet d'enlever le freeze des premieres donnees de chaque log
     data = data.drop_duplicates(subset = "FD_PILOT_HEAD_PITCH" )
     data = data.reset_index(drop = True)

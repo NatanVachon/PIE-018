@@ -39,25 +39,6 @@ class ZoneGraphics:
         self.pcolor.set_alpha(alpha)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-                                                       CONSTANTS
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-# AOI boundaries
-AOI_LEFT   = -90 #[°]
-AOI_MIDDLE = 0 #[°]
-AOI_RIGHT  = 90 #[°]
-AOI_TOP    = 40 #[°]
-AOI_FRONT  = -20 #[°]
-AOI_BOTTOM = -40 #[°]
-
-# AOI indexes
-LEFT = 0
-RIGHT = 1
-FRONT = 2
-ZI1 = 3
-ZI2 = 4
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                                        FUNCTIONS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -71,9 +52,9 @@ def compute_zones(data, poi):
     pitches, headings = [data.at[i, "FD_PILOT_HEAD_PITCH"] for i in timestamps], [data.at[i, "FD_PILOT_HEAD_HEADING"] for i in timestamps]
 
     # Define zones
-    zone_left = Zone('L', headings[1], headings[5], -90, 90)
+    zone_left = Zone('L', -180, headings[5], -180, 180)
     zone_front = Zone('F', headings[5], headings[6], pitches[4], pitches[3])
-    zone_right = Zone('R', headings[6], headings[2], -90, 90)
+    zone_right = Zone('R', headings[6], 180, -180, 180)
     zone_i1 = Zone('P', headings[5], headings[9], pitches[7], pitches[4])
     zone_i2 = Zone('S', headings[9], headings[6], pitches[7], pitches[4])
 

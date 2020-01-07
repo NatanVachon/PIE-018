@@ -9,6 +9,10 @@ import AOI_classifier as aoic
 import pandas as pd
 import Pattern_From_AOI as pfa
 
+import sys
+sys.path.insert(1, 'Preprocessing')
+import Preprocessing
+
 # Data path
 data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
@@ -16,7 +20,8 @@ data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
 poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
-
+# ----------------------------------   DATA CLEANING   ------------------------------- #
+data = Preprocessing.data_preprocessing(data)
 
 # ----------------------------------   AOI CLASSIFICATION   ------------------------------- #
 # Zone computation
