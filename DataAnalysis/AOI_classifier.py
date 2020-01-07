@@ -90,6 +90,7 @@ def classify_aoi(zones, pitch, heading):
 def classify_aois(zones, data):
     aois = [classify_aoi(zones, data.at[i, "FD_PILOT_HEAD_PITCH"], data.at[i, "FD_PILOT_HEAD_HEADING"]) for i in range(len(data))]
     df = pd.DataFrame()
+    df["timestamp"] = data["FD_TIME_MS"]
     df["AOI"] = aois
     return df
 
