@@ -20,11 +20,21 @@ zones = aoic.compute_zones(data, poi)
 # Classify from flight data
 aois = aoic.classify_aois(zones, data)
 
-clean_aois=clean_AOI(aois) 
 
+
+#Sort les différents états : delta= temps resté sur cet AOI
+###SEUIL = seuil en ms pour considérer que c'est pas un outlier
+clean_aois=clean_AOI(aois,seuil) 
+
+
+#pivot = table de passage des transition
+#transition = tableau des transitions
 pivot,transition=count_transitions(clean_aois)
 
 print(pivot)
 print(transition)
 
+
+#Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
 count_AOI(clean_aois,aois)
+

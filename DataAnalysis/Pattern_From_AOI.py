@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import time
 
 #This function will compress all the data to keep only the first row for each AOI, allowing to detect patterns after
-def clean_AOI(full_pd):
-    seuil=1 #minimal number of ms to consider we were in this AOI    
+def clean_AOI(full_pd,seuil):
+    seuil=seuil #minimal number of ms to consider we were in this AOI    
     cols=["Timestamp","AOI","AHRS"]#columns to keep
     clean = full_pd.loc[(full_pd["AOI"].shift() != full_pd["AOI"])]
     clean["delta"]=(-clean["timestamp"]+clean["timestamp"].shift(-1)).fillna(0)
