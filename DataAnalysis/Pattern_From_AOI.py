@@ -35,7 +35,7 @@ def count_transitions(AOI_pd):
     transition["average_time_aft"]=0
     transition["%from"]=0 # Depuis l'AOI de départ, % de fois ou on arrive à AOI arrivé
     transition["%to"]=0  # D'ou vient on depuis cet AOI d'arrivé
-
+    transition["%count"]=0
 
     for a in transition.index:
         AOI1=transition["AOI"].loc[a]
@@ -45,6 +45,8 @@ def count_transitions(AOI_pd):
         transition["average_time_aft"].loc[a]=AOI_pd["delta"].loc[a==AOI_pd["prev_transition"]].mean()
         transition["%from"].loc[a]=int((100*transition["count"].loc[a]/AOI_pd.loc[AOI_pd["AOI"]==AOI1].count()["AOI"]))
         transition["%to"].loc[a]=int((100*transition["count"].loc[a]/AOI_pd.loc[AOI_pd["next_AOI"]==AOI2].count()["next_AOI"]))
+    for b in transition.index:
+        transition["%count"].loc[b]=int((100*transition["count"].loc[b]/transition["count"].sum()))
 
     ind=[a for a in AOI.index]
     col=ind.copy()

@@ -35,12 +35,11 @@ clean_aois=pfa.clean_AOI(aois,seuil)
 #LISTE DES ETATS
 liste=clean_aois["AOI"].tolist()
 
-#pivot = table de passage des transition
-#transition = tableau des transitions
 pivot,transition=pfa.count_transitions(clean_aois)
 
-print(pivot)
-print(transition)
+print(pivot) #pivot = table de passage des transition
+print(transition) #transition = tableau des transitions
+
 
 #Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
 pfa.count_AOI(clean_aois,aois)
