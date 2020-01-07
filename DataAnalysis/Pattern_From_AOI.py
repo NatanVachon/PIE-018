@@ -22,6 +22,9 @@ def clean_AOI(full_pd,seuil):
     clean.reset_index(drop=True,inplace=True)
     return clean
 
+
+
+
 def count_transitions(AOI_pd):
     AOI_pd["next_AOI"]=AOI_pd["AOI"].shift(-1).fillna("0")
     AOI_pd["prev_AOI"]=AOI_pd["AOI"].shift(1).fillna("0")
