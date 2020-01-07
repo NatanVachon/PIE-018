@@ -9,6 +9,9 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 from pprint import pprint 
+
+import os
+os.environ["PATH"]+=os.pathsep +"D:/Download 2/graphviz-2.38/release/bin"
 states=pivot.index.tolist()
 # create a function that maps transition probability dataframe 
 # to markov edges and weights
@@ -32,7 +35,7 @@ print(f'Nodes:\n{G.nodes()}\n')
 # edges represent transition probabilities
 for k, v in edges_wts.items():
     tmp_origin, tmp_destination = k[0], k[1]
-    G.add_edge(tmp_origin, tmp_destination, weight=v, label=v)
+    G.add_edge(tmp_origin, tmp_destination, weight=v, label=v, penwidth=v*3/50)
 print(f'Edges:')
 pprint(G.edges(data=True))    
 

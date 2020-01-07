@@ -50,5 +50,14 @@ print(transition) #transition = tableau des transitions
 stats_aoi=pfa.count_AOI(clean_aois,aois)
 print(stats_aoi)
 
+tbp=clean_aois[["delta","timestamp","AOI"]]
+tbp.plot(kind='scatter',x=1,y=0,c=colors,legend=True)
 
+L ='r'
+F='g'
+R='y'
+P='b'
+S='c'
+colors=tuple(colors)
 
+colors = np.where(clean_aois["AOI"]=="L",L,np.where(clean_aois["AOI"]=="R",R,np.where(clean_aois["AOI"]=="P",P,np.where(clean_aois["AOI"]=="S",S,np.where(clean_aois["AOI"]=="F",F,F)))))
