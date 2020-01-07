@@ -5,7 +5,7 @@ Theo Taupiac
 Reminder :
     
     lancer data_reconstruction en amont
-        
+    Ajouter le GPS POUR IS_TURNING
         
 """
 ###############################################################################
@@ -24,9 +24,11 @@ import time
 
 threshold = 2
 
-pilot_names = ["/1211_Guilhem_gauche","/1211_maxime_droite","/1211_simon_droite","/1211_natan_gauche",]
+address_folder = "/Users/theo_taupiac/Desktop/PIE_0018/1211_test_protocole"
+pilot_names = ["/1211_Guilhem_gauche","/1211_maxime_droite","/1211_simon_droite","/1211_natan_gauche"]
+
 # voir si on code pour utiliser les 100ms
-choix_pilote = 0
+choix_pilote = 1
 
 ###############################################################################
 #########################       FUNCTIONS        ##############################
@@ -40,12 +42,13 @@ def my_read_csv(filename):
 ###############################################################################
 
 #   BUG
-#filename = "/Users/theo_taupiac/Desktop/PIE 0018" + pilot_names[choix_pilote] + "/" +"numData_10ms_.csv"
-#dataFlight = my_read_csv("/Users/theo_taupiac/Desktop/PIE 0018" + filename)
+filename = address_folder + pilot_names[choix_pilote] + "/numData_10ms_"
+#dataFlight = my_read_csv("/Users/theo_taupiac/Desktop/PIE_0018" + filename)
     
-####### Opening CSV  
+####### Opening CSV
 
-dataFlight = my_read_csv("numData_10ms_.csv")
+dataFlight = my_read_csv(filename)
+#dataFlight = my_read_csv(address_folder + "/numData_10ms_.csv")
 
 # Cette étape fait office de passage a 100ms pour le moment
 dataFlight = dataFlight.drop_duplicates(subset = "FD_PILOT_HEAD_HEADING" )
@@ -129,6 +132,7 @@ for i in range(3) :
         dataFlight.loc[k,Jerk_name[i]] = 
 
 """
+
 """
 D'apres le travail de  "Anguita et al. (2013)", voici les datas et procedes appliques pour obtenir 561 variables.
 
