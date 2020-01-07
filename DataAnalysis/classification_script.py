@@ -33,7 +33,7 @@ seuil=10
 clean_aois=pfa.clean_AOI(aois,seuil)
 
 #LISTE DES ETATS
-liste=clean_aois["AOI"].tolist()
+liste_aoi=clean_aois["AOI"].tolist()
 
 pivot,transition=pfa.count_transitions(clean_aois)
 
