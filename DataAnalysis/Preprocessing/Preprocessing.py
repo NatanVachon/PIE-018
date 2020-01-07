@@ -18,11 +18,6 @@ Reminder :
 #########################        IMPORTS          #############################
 ###############################################################################
 
-import pandas as pd
-import numpy as np
-#%matplotlib inline
-import matplotlib.pyplot as plt
-import time
 
 ###############################################################################
 #########################       PARAMETRES       ##############################
@@ -41,7 +36,7 @@ def data_preprocessing(data):
 
 
     ####### Columns names
-
+    """
     ### POSITION
     Position_name = ["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_ROLL_X","FD_PILOT_HEAD_PITCH"]
 
@@ -86,5 +81,5 @@ def data_preprocessing(data):
         data[Jerk_name[i]]=0
         for k in range (threshold, len(data)-threshold):
             data.loc[k,Jerk_name[i]] = (data.loc[k+threshold,Acc_name[i]]- data.loc[k-threshold,Acc_name[i]])/((data.loc[k+threshold,"FD_TIME_MS"]- data.loc[k-threshold,"FD_TIME_MS"])*0.001)
-
+    """
     return(data)

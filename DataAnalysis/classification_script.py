@@ -14,7 +14,8 @@ sys.path.insert(1, 'Preprocessing')
 import Preprocessing
 
 # Data path
-data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+#data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 
 # Parse flight data and points of interest
 data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
@@ -28,7 +29,6 @@ data = Preprocessing.data_preprocessing(data)
 zones = aoic.compute_zones(data, poi)
 # Classify from flight data
 aois = aoic.classify_aois(zones, data)
-
 
 
 # ----------------------------------   TRANSITION EXTRACTION   ------------------------------- #
