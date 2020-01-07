@@ -74,7 +74,7 @@ def update_surbrillance(pitch, heading):
 
 if __name__ == "__main__":
     # Initialization
-    data = pd.read_csv(data_path + "/numData_10ms.csv", sep=';')
+    data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
     poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
     poi_timestamps = get_poi_timestamps(data, poi)
 
@@ -87,5 +87,5 @@ if __name__ == "__main__":
     gZone_zi2 = ZoneGraphics(zones[4], (0, 1, 1))
 
     # Launch animation
-    ani = FuncAnimation(fig, update_animation, init_func=init_animation, frames=[i for i in range(len(data))], blit=True, interval = 5)
+    ani = FuncAnimation(fig, update_animation, init_func=init_animation, frames=[i for i in range(len(data))], blit=True, interval = 25)
     plt.show()

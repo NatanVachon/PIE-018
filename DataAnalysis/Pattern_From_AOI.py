@@ -6,19 +6,15 @@ Created on Tue Jan  7 10:13:43 2020
 """
 
 import pandas as pd
-import numpy as np
-#%matplotlib inline
-import matplotlib.pyplot as plt
-import time
 
 #This function will compress all the data to keep only the first row for each AOI, allowing to detect patterns after
 def clean_AOI(full_pd,seuil):
-    seuil=seuil #minimal number of ms to consider we were in this AOI    
+    seuil=seuil #minimal number of ms to consider we were in this AOI
     cols=["Timestamp","AOI","AHRS"]#columns to keep
     clean = full_pd.loc[(full_pd["AOI"].shift() != full_pd["AOI"])]
     clean["delta"]=(-clean["timestamp"]+clean["timestamp"].shift(-1)).fillna(0)
     clean=clean.loc[(clean["delta"]>seuil)]
-    
+
     clean.reset_index(drop=True,inplace=True)
     return clean
 
@@ -58,15 +54,15 @@ def count_transitions(AOI_pd):
     for i in ind:
         for j in col:
             a=i+"=>"+j
-            
+
             if a in transition.index:
                 pivot.loc[j,i]=transition["%from"].loc[a]
-    pivot=pivot.astype(int)  
+    pivot=pivot.astype(int)
     transition.drop(columns=["AOI","timestamp","next_AOI","average_time_aft","prev_AOI","prev_transition"],inplace=True)
     return pivot,transition
-            
-                
-   
+
+
+
 
 def count_AOI(AOI_pd,full_pd):
     AOI=AOI_pd.drop_duplicates(subset="AOI").sort_values("AOI").set_index("AOI")
@@ -75,7 +71,7 @@ def count_AOI(AOI_pd,full_pd):
     AOI["total_time"]=0
     AOI["%_time"]=0
     total_time=full_pd["timestamp"].max()-full_pd["timestamp"].min()
-    
+
     for a in AOI.index:
         AOI["count"].loc[a]=AOI_pd.loc[a==AOI_pd["AOI"]].count()["AOI"]
         AOI["average_time"].loc[a]=AOI_pd["delta"].loc[a==AOI_pd["AOI"]].mean()
