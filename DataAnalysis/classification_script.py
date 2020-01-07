@@ -30,7 +30,6 @@ zones = aoic.compute_zones(data, poi)
 aois = aoic.classify_aois(zones, data)
 
 
-
 # ----------------------------------   TRANSITION EXTRACTION   ------------------------------- #
 seuil=10
 #Sort les différents états : delta= temps resté sur cet AOI
