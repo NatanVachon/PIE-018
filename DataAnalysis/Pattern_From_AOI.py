@@ -11,9 +11,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-
-full=pd.DataFrame(["D","R","R","R","P","P","D","P","P","P","R","R","R","F","F","F","P","P","R","R","R","R","L"],columns=["AOI"])
-full["timestamp"]=[i for i in range(0,23)]
 #This function will compress all the data to keep only the first row for each AOI, allowing to detect patterns after
 def clean_AOI(full_pd):
     seuil=1 #minimal number of ms to consider we were in this AOI    
@@ -24,9 +21,6 @@ def clean_AOI(full_pd):
     
     clean.reset_index(drop=True,inplace=True)
     return clean
-
-
-full2=clean_AOI(full)
 
 def count_transitions(AOI_pd):
     AOI_pd["next_AOI"]=AOI_pd["AOI"].shift(-1).fillna("0")
@@ -85,9 +79,3 @@ def count_AOI(AOI_pd,full_pd):
         AOI["total_time"].loc[a]=AOI_pd["delta"].loc[a==AOI_pd["AOI"]].sum()
     AOI["%_time"]=(100*AOI["total_time"]/total_time).astype(int)
     return AOI
-
-
-full3=count_AOI(full2,full)
-print(full3)
-undet=100-full3["%_time"].sum()
-print(undet,"% was not categorized")
