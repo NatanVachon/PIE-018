@@ -26,6 +26,8 @@ aois = aoic.classify_aois(zones, data)
 ###SEUIL = seuil en ms pour considérer que c'est pas un outlier
 clean_aois=clean_AOI(aois,seuil) 
 
+#LISTE DES ETATS
+clean_aois["AOI"].tolist()
 
 #pivot = table de passage des transition
 #transition = tableau des transitions
@@ -37,4 +39,7 @@ print(transition)
 
 #Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
 count_AOI(clean_aois,aois)
+
+
+
 
