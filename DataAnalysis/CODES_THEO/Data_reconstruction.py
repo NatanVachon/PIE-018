@@ -28,7 +28,13 @@ import os
 # A UTILISER SI ON VEUT BOSSER SUR DAUTRES DOSSIERS
 
 #address_folder = "/Users/theo_taupiac/Desktop/PIE_0018/1211_test_protocole/"
+
+############# LIGNE A CHANGER JUSTE EN DESSOUS ################################
+
 address_folder = "/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/"
+
+###############################################################################
+
 #pilot_names = ["1211_Guilhem_gauche","1211_maxime_droite","1211_simon_droite","1211_natan_gauche"]
 pilot_names = ["flight_10Dec2019_guilhem","flight_10Dec2019_hugo","flight_10Dec2019_maxime","flight_10Dec2019_simon","flight_10Dec2019_natan","flight_10Dec2019_taupichef"]
 
