@@ -6,6 +6,7 @@ Created on Mon Nov 25 14:38:23 2019
 """
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -13,7 +14,8 @@ from matplotlib.colors import LinearSegmentedColormap
                                                        CLASSES
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 class Zone:
-    def __init__(self, xMin, xMax, yMin, yMax):
+    def __init__(self, name, xMin, xMax, yMin, yMax):
+        self.name = name
         self.x = [xMin, xMax]
         self.y = [yMin, yMax]
 
@@ -24,8 +26,8 @@ class Zone:
 
 
 class ZoneGraphics:
-    def __init__(self, name, zone, color):
-        self.name = name
+    def __init__(self, zone, color):
+        self.name = zone.name
         # Store zone
         self.zone = zone
         # Create color
@@ -55,15 +57,6 @@ FRONT = 2
 ZI1 = 3
 ZI2 = 4
 
-# AOI zones
-leftZone = Zone(AOI_LEFT, AOI_MIDDLE, AOI_FRONT, AOI_TOP)
-rightZone = Zone(AOI_MIDDLE, AOI_RIGHT, AOI_FRONT, AOI_TOP)
-zi1Zone = Zone(AOI_LEFT, AOI_MIDDLE, AOI_BOTTOM, AOI_FRONT)
-zi2Zone = Zone(AOI_MIDDLE, AOI_RIGHT, AOI_BOTTOM, AOI_FRONT)
-
-AOI_zones = [leftZone, rightZone, zi1Zone, zi2Zone]
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                                        FUNCTIONS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -78,25 +71,25 @@ def compute_zones(data, poi):
     pitches, headings = [data.at[i, "FD_PILOT_HEAD_PITCH"] for i in timestamps], [data.at[i, "FD_PILOT_HEAD_HEADING"] for i in timestamps]
 
     # Define zones
-    zone_left = Zone(headings[1], headings[5], -90, 90)
-    zone_front = Zone(headings[5], headings[6], pitches[4], pitches[3])
-    zone_right = Zone(headings[6], headings[2], -90, 90)
-    zone_i1 = Zone(headings[8], headings[9], pitches[7], pitches[4])
-    zone_i2 = Zone(headings[9], headings[10], pitches[7], pitches[4])
-
-    # TODO: supprimer
-    print(headings[0], pitches[0])
+    zone_left = Zone('L', headings[1], headings[5], -90, 90)
+    zone_front = Zone('F', headings[5], headings[6], pitches[4], pitches[3])
+    zone_right = Zone('R', headings[6], headings[2], -90, 90)
+    zone_i1 = Zone('P', headings[5], headings[9], pitches[7], pitches[4])
+    zone_i2 = Zone('S', headings[9], headings[6], pitches[7], pitches[4])
 
     return [zone_left, zone_front, zone_right, zone_i1, zone_i2]
 
 def classify_aoi(zones, pitch, heading):
     for i in range(len(zones)):
         if zones[i].inZone(heading, pitch):
-            return i
+            return zones[i].name
 
     # If not in any zone
-    return None
+    return 'N'
 
-def classify_aois(zones, pitchs, headings):
-    return [classify_aoi(zones, pitch, heading) for (pitch, heading) in (pitchs, headings)]
+def classify_aois(zones, data):
+    aois = [classify_aoi(zones, data.at[i, "FD_PILOT_HEAD_PITCH"], data.at[i, "FD_PILOT_HEAD_HEADING"]) for i in range(len(data))]
+    df = pd.DataFrame()
+    df["AOI"] = aois
+    return df
 
