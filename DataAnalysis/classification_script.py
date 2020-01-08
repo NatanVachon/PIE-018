@@ -19,9 +19,9 @@ import Preprocessing
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
-#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
 
-data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+#data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 
 
 # Parse flight data and points of interest
@@ -33,7 +33,7 @@ data = Preprocessing.data_preprocessing(data)
 
 
 # ----------------------------------   TEST THEO ----------------------------------------#
-
+#### ne trouve pas l'attribute.. help
 DataMove = cb.plane_and_head_turning(data)
 cb.freq_head_turning(DataMove)
 
