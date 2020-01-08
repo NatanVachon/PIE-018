@@ -19,7 +19,10 @@ import Preprocessing
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
-data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+
+data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+
 
 # Parse flight data and points of interest
 data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
