@@ -9,13 +9,20 @@ import AOI_classifier as aoic
 import pandas as pd
 import Pattern_From_AOI as pfa
 
+import creation_baseMove as cb
+
 import sys
 sys.path.insert(1, 'Preprocessing')
 import Preprocessing
 
+
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
-data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+
+data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+
+#data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+
 
 # Parse flight data and points of interest
 data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
@@ -23,6 +30,12 @@ poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
 # ----------------------------------   DATA CLEANING   ------------------------------- #
 data = Preprocessing.data_preprocessing(data)
+
+
+# ----------------------------------   TEST THEO ----------------------------------------#
+#### ne trouve pas l'attribute.. help
+DataMove = cb.plane_and_head_turning(data)
+cb.freq_head_turning(DataMove)
 
 # ----------------------------------   AOI CLASSIFICATION   ------------------------------- #
 # Zone computation

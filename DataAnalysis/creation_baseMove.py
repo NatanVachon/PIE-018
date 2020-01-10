@@ -6,13 +6,12 @@ Created on Mon Nov 25 15:21:11 2019
 @author: theo_taupiac
 
 Reminder :
-    lancer data_reconstruction 
-    -> travaille sur le fichier 10ms, données avec duplicate.drop
     
     plane_turning :
         
     s'adapter par rapport a la croix pour head turn
     preciser les virages pas bien engagés
+    aller voir avant et apres virage av ion, si la tete tourne
     
     !!!!! difference de time stamp pour duree virage
     
@@ -27,30 +26,21 @@ Reminder :
 import pandas as pd
 import numpy as np
 #%matplotlib inline
-import matplotlib.pyplot as plt
-import time
 
 ###############################################################################
 #########################       PARAMETRES       ##############################
 ###############################################################################
-
-choix_pilote = 0
-
 
 threshold_turn = 4
 head_turn_value = 10 ### A PARAMETRER EN FONCTION DE LA CROIX
 plane_turn_value = 15
 derive_cap = 1
 
-"/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/"
 ###############################################################################
 #########################       CODE PRELIM       #############################
 ###############################################################################
 
-exec(open("/Users/theo_taupiac/Desktop/PIE_0018/CODES_THEO/creation_features.py").read()) 
-
-DataMove = pd.DataFrame(columns = ['turning_plane','turning_head'])
-
+#DataMove = pd.DataFrame(columns = ['turning_plane','turning_head'])
 
 ###############################################################################
 ############################     FONCTIONS     ################################
@@ -61,16 +51,23 @@ DataMove = pd.DataFrame(columns = ['turning_plane','turning_head'])
 
 """
 S'applique aux data de XPlane. Donne la direction du virage a chaque instant du vol. parametres a choisir ci-dessus (next update)
++++
+Donne les instants ou la tête tourne a droite ou a gauche. head_turn_value reglee avec la croix (next update)
 """
 
-
-
-def plane_turning(threshold_turn, df):
+def plane_and_head_turning(df):
+    
+    DataMove = pd.DataFrame(columns = ['turning_plane','turning_head'])
+    
+    ######### CODE PLANE_TURNING      
     
     roulis = df.loc[:,["FD_AHRS_ROLL"]]
     #cap = df.loc[:,["FD_AHRS_HEADING"]]
     cap = df.loc[:,["FD_GPS_COURSE"]]
     cap_time = df.loc[:,["FD_TIME_MS"]]
+    cap_head = df.loc[:,["FD_PILOT_HEAD_HEADING"]]
+    #cap_head_time = df.loc[:,["FD_TIME_MS"]]
+    
     
     for t in range(threshold_turn, len(df)-threshold_turn):
         
@@ -101,35 +98,26 @@ def plane_turning(threshold_turn, df):
         else:
             DataMove.loc[t,'turning_plane'] = 0
             #"^^^"
-            
-        
-    return(DataMove)
-
-
-"""
-S'applique aux data de XPlane. Donne les instants ou la tête tourne a droite ou a gauche. head_turn_value reglee avec la croix (next update)
-"""
-def head_turning(df):
-    cap_head = df.loc[:,["FD_PILOT_HEAD_HEADING"]]
-    #cap_head_time = df.loc[:,["FD_TIME_MS"]]
+              
+    ######### CODE HEAD_TURNING             
     
     for t in range(len(df)):
            
-           if (cap_head.iloc[t].values <= -head_turn_value) :
-                DataMove.loc[t,'turning_head'] = -1
-                #"<<<------"
+        if (cap_head.iloc[t].values <= -head_turn_value) :
+            DataMove.loc[t,'turning_head'] = -1
+            #"<<<------"
             
-           elif (cap_head.iloc[t].values >= head_turn_value) :
-                DataMove.loc[t,'turning_head'] =  1
-                #"------>>>"
+        elif (cap_head.iloc[t].values >= head_turn_value) :
+            DataMove.loc[t,'turning_head'] =  1
+            #"------>>>"
                 
-           else:
-                DataMove.loc[t,'turning_head'] = 0
-                #"^^^"
+        else:
+            DataMove.loc[t,'turning_head'] = 0
+            #"^^^"
+        
     return(DataMove)
-    
-  
-    
+
+   
 """
 S'applique directement à Datamove. grce aux data crees par les deux fonctions precedentes.
 Donne la frequence de tournee de tete pendant le virage.
@@ -220,19 +208,29 @@ def freq_head_turning(dm):
     
     print("Temps moyen entre deux regards a l'exterieur pour chaque virage",Frequence_tete, " s")
 
-    
-    
+
+
+
+
+"""
+data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+
+# Parse flight data and points of interest
+data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
+      
+freq_head_turning(plane_and_head_turning(data))   
 #turning_plane,turning_head)    
-    
+"""
+"""   
     
     
 ###############################################################################
 ######################          TEST FONCTION          ########################  
 ###############################################################################
     
-plane_turning(threshold_turn, dataFlight)
+plane_turning(dataFlight)
 head_turning(dataFlight)
 freq_head_turning(DataMove)
 
-
+"""
 ### A CODER changement dinclinaison precede d'un regard (DEBUT ET FIN VIRAGE)
