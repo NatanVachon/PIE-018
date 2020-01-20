@@ -20,12 +20,13 @@ import numpy as np
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
-data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
+#data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 # Parse flight data and points of interest
-data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
+data = pd.read_csv(data_path + "/numData_100ms.csv"k,l.;é, sep=';')
 poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
 # ----------------------------------   DATA CLEANING   ------------------------------- #
@@ -52,8 +53,9 @@ clean_aois=pfa.clean_AOI(aois, seuil)
 
 #LISTE DES ETATS
 liste_aoi=clean_aois["AOI"].tolist()
-
+print("AOI nettoyés")
 pivot,transition=pfa.count_transitions(clean_aois)
+print("Transitions comptées")
 
 print(pivot) #pivot = table de passage des transition
 print(transition) #transition = tableau des transitions
@@ -74,3 +76,4 @@ colors = np.where(clean_aois["AOI"]=="L",L,np.where(clean_aois["AOI"]=="R",R,np.
 colors=tuple(colors)
 
 tbp.plot(kind='scatter',x=1,y=0,c=colors,legend=True)
+

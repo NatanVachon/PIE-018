@@ -1,48 +1,46 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan  7 14:55:34 2020
+Created on Mon Jan 20 17:49:47 2020
 
 @author: Simon
 """
-import numpy as np
-import pandas as pd
+
 import networkx as nx
 import matplotlib.pyplot as plt
-from pprint import pprint 
 
-import os
-os.environ["PATH"]+=os.pathsep +"D:/Download 2/graphviz-2.38/release/bin"
-states=pivot.index.tolist()
-# create a function that maps transition probability dataframe 
-# to markov edges and weights
-def _get_markov_edges(Q):
-    edges = {}
-    for col in Q.columns:
-        for idx in Q.index:
-            edges[(idx,col)] = Q.loc[idx,col]
-    return edges
+options = {
+    'arrowstyle': '-|>',
+    'arrowsize': 12,
+}
 
-edges_wts = _get_markov_edges(pivot)
-pprint(edges_wts)
 
-# create graph object
-G = nx.MultiDiGraph()
 
-# nodes correspond to states
-G.add_nodes_from(states)
-print(f'Nodes:\n{G.nodes()}\n')
+G = nx.DiGraph()
+for a in pivot.index:
+    G.add_node(a) 
+for i in pivot.index:
+    for j in pivot.columns:
+        if not((i, j) in list(G.edges)  or (j, i) in list(G.edges)) or i==j:
+            G.add_edge(i,j,weight=pivot.loc[i,j])
 
-# edges represent transition probabilities
-for k, v in edges_wts.items():
-    tmp_origin, tmp_destination = k[0], k[1]
-    G.add_edge(tmp_origin, tmp_destination, weight=v, label=v, penwidth=v*3/50)
-print(f'Edges:')
-pprint(G.edges(data=True))    
+avg_weight=pivot.mean().mean()
 
-pos = nx.drawing.nx_pydot.graphviz_layout(G, prog='dot')
-nx.draw_networkx(G, pos)
+elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] >1.2*avg_weight]
+emed=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] >0.8*avg_weight and d['weight']<1.2*avg_weight ]
+esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <0.8*avg_weight]
 
-# create edge labels for jupyter plot but is not necessary
-edge_labels = {(n1,n2):d['label'] for n1,n2,d in G.edges(data=True)}
-nx.draw_networkx_edge_labels(G , pos, edge_labels=edge_labels)
-nx.drawing.nx_pydot.write_dot(G, 'pet_dog_markov.dot')
+
+pos=nx.spring_layout(G)
+
+nx.draw_networkx_nodes(G,pos,node_size=1000)
+
+# edges
+nx.draw_networkx_edges(G,pos,edgelist=elarge,
+                    width=6, arrows=True)
+nx.draw_networkx_edges(G,pos,edgelist=esmall,
+                    width=2,alpha=0.2, arrows=True)
+nx.draw_networkx_edges(G,pos,edgelist=emed,
+                    width=4,alpha=0.5, arrows=True)
+# labels
+nx.draw_networkx_labels(G,pos,**options,font_size=20,font_family='sans-serif')
+nx.draw(G,with_labels=True, font_weight='bold')
