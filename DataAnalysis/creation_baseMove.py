@@ -31,10 +31,10 @@ import numpy as np
 #########################       PARAMETRES       ##############################
 ###############################################################################
 
-threshold_turn = 4
-head_turn_value = 10 ### A PARAMETRER EN FONCTION DE LA CROIX
-plane_turn_value = 15
-derive_cap = 1
+threshold_turn = 4 # ???
+head_turn_value = 10 # A PARAMETRER EN FONCTION DE LA CROIX <----- !!!
+plane_turn_value = 15 # inclinaison des ailes minimale pour considerer un virage
+derive_cap = 1 # on considere un virage lorsque la derive de cap est > a 1'/s
 
 ###############################################################################
 #########################       CODE PRELIM       #############################
@@ -122,7 +122,7 @@ def plane_and_head_turning(df):
 S'applique directement à Datamove. grce aux data crees par les deux fonctions precedentes.
 Donne la frequence de tournee de tete pendant le virage.
 
-PAS D'ORIENTATION POUR L'INSTANT
+
 """    
 def freq_head_turning(dm):
     nb_virage = 0
@@ -131,6 +131,7 @@ def freq_head_turning(dm):
     
     turning_plane = []
     turning_head = []
+    last_look_before_turning = []
     
     turn_plane = dm.loc[:,["turning_plane"]]
     turn_head = dm.loc[:,["turning_head"]]
@@ -151,6 +152,22 @@ def freq_head_turning(dm):
             if turn_head.iloc[t+1].values == 0 :
                 turning_head.append([0])
                 
+            # Regards avant le virage
+            p = t
+            while (p > t-100) & (abs(turn_head.iloc[p].values) != 1) :
+                p-=1
+            temp_time = p
+            if turn_head.iloc[p].values == 1 :
+                last_look_before_turning.append(["droite",1,round((t-p)*0.1,1)]) ### indique le cote de la tete en premier, le nb de secondes en second, et cb de secondes cetait avant le virage en 3eme variable
+            else:
+                last_look_before_turning.append(["gauche",1,round((t-p)*0.1,1)])
+            p-=1
+            while (p > t-100) & (turn_head.iloc[p].values == turn_head.iloc[temp_time].values):
+                p-=1
+                last_look_before_turning[nb_virage][1] += 1
+            last_look_before_turning[nb_virage][1] = round(last_look_before_turning[nb_virage][1]/10,1)
+            
+            
         # VIRAGE QUI CONTINUE
         if abs(turn_plane.iloc[t+1].values) == 1 and abs(turn_plane.iloc[t].values) == 1:
             turning_plane[nb_virage] += 1
@@ -205,7 +222,7 @@ def freq_head_turning(dm):
     for i in range (len(turning_head)): 
         nb_regards += [len(turning_head[i])]
     print("Nombre de regards a l'exterieur pour chaque virage :", nb_regards)
-    
+    print("Cote dernier regard avant de tourner/duree/il ya cb de secondes",last_look_before_turning)
     print("Temps moyen entre deux regards a l'exterieur pour chaque virage",Frequence_tete, " s")
 
 

@@ -33,7 +33,7 @@ data = Preprocessing.data_preprocessing(data)
 
 
 # ----------------------------------   TEST THEO ----------------------------------------#
-#### ne trouve pas l'attribute.. help
+
 DataMove = cb.plane_and_head_turning(data)
 cb.freq_head_turning(DataMove)
 
