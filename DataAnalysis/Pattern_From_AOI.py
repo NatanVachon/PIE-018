@@ -6,7 +6,7 @@ Created on Tue Jan  7 10:13:43 2020
 """
 
 import pandas as pd
-
+import numpy as np
 #This function will compress all the data to keep only the first row for each AOI, allowing to detect patterns after
 def clean_AOI(full_pd, seuil):
     cols=["Timestamp","AOI","AHRS"]#columns to keep
@@ -80,3 +80,24 @@ def count_AOI(AOI_pd,full_pd):
         AOI.loc[a,"total_time"]=AOI_pd.loc[a==AOI_pd["AOI"],"delta"].sum()
     AOI.loc[:,"%_time"]=(100*AOI["total_time"]/total_time).astype(int)
     return AOI
+
+
+
+
+def chain_AOI(pivot,liste_aoi):
+    aois=pivot.index.copy().to_numpy()
+    liste_aois="".join(liste_aoi)
+    aoi_chain=pd.DataFrame(columns=["count"])    
+    for i in aois:
+        for j in np.delete(aois,np.where(aois==i)):
+            if liste_aois.count(i+j)>0:
+                for k in np.delete(aois,np.where(aois==j)):
+                    if liste_aois.count(i+j+k)>0:
+                        for l in np.delete(aois,np.where(aois==k)):
+                            temp=liste_aois.count(i+j+k+l)
+                            if temp>0 :
+                                aoi_chain.loc[i+j+k+l,"count"]=temp
+            
+    aoi_chain["pourcent"]=100*aoi_chain.loc[:,"count"]/aoi_chain["count"].sum()
+    aoi_chain=aoi_chain.loc[aoi_chain["pourcent"]>3]
+    return aoi_chain
