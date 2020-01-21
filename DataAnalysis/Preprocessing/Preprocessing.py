@@ -29,11 +29,21 @@ threshold = 2
 #########################       FUNCTION       ################################
 ###############################################################################
 
-def data_preprocessing(data):
+def data_preprocessing(data, poi):
     # Cette étape permet d'enlever le freeze des premieres donnees de chaque log
-    data = data.drop_duplicates(subset = "FD_PILOT_HEAD_PITCH" )
+    data = data.drop_duplicates(subset = "FD_PILOT_HEAD_PITCH")
     data = data.reset_index(drop = True)
 
+    # On recale le timestamp à 0s
+    t0 = data.at[0, "FD_TIME_MS"]
+
+    data["FD_TIME_MS"].astype("float")
+    data["FD_TIME_MS"] -= t0
+    data["FD_TIME_MS"] *= 0.001
+
+    poi["FD_TIME_MS"].astype("float")
+    poi["FD_TIME_MS"] -= t0
+    poi["FD_TIME_MS"] *= 0.001
 
     ####### Columns names
     """
@@ -82,4 +92,4 @@ def data_preprocessing(data):
         for k in range (threshold, len(data)-threshold):
             data.loc[k,Jerk_name[i]] = (data.loc[k+threshold,Acc_name[i]]- data.loc[k-threshold,Acc_name[i]])/((data.loc[k+threshold,"FD_TIME_MS"]- data.loc[k-threshold,"FD_TIME_MS"])*0.001)
     """
-    return(data)
+    return data, poi

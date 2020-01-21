@@ -73,5 +73,8 @@ def classify_aois(zones, data):
     df = pd.DataFrame()
     df["timestamp"] = data["FD_TIME_MS"]
     df["AOI"] = aois
+
+    # Save aois in data
+    data["AOI"] = aois
     return df
 
