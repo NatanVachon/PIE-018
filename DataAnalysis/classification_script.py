@@ -20,9 +20,10 @@ import numpy as np
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+
 data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
 
-#data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 # Parse flight data and points of interest
