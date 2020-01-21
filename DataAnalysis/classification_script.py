@@ -61,15 +61,14 @@ print("Transitions comptées")
 print(pivot) #pivot = table de passage des transition
 print(transition) #transition = tableau des transitions
 
-
-#Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
-
 ###############################################################################
 #########################        FEATURES          ############################
 ###############################################################################
 
 # Check if a traffic search happened around 100s
-#print("Check for traffic check around 100s:", ts.traffic_search(data, 100))
+print("Check for traffic check around 100s:", ts.traffic_search(data, 100))
+
+#Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
 stats_aoi=pfa.count_AOI(clean_aois ,aois)
 print(stats_aoi)
 
