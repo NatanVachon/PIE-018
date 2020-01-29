@@ -20,11 +20,11 @@ import numpy as np
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
-#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
 
-data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
+#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
 
-data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+#data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 # Parse flight data and points of interest
@@ -38,8 +38,8 @@ data, poi = Preprocessing.data_preprocessing(data, poi)
 # ----------------------------------   TEST THEO ----------------------------------------#
 
 DataMove = cb.plane_and_head_turning(data)
-cb.freq_head_turning(DataMove)
-
+cb.graph_results_turning(DataMove)
+cb.temporal_graph(DataMove)
 # ----------------------------------   AOI CLASSIFICATION   ------------------------------- #
 # Zone computation
 zones = aoic.compute_zones(data, poi)
