@@ -21,9 +21,9 @@ import numpy as np
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
 
-data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
+data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
 
-data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+#data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 # Parse flight data and points of interest
@@ -31,7 +31,7 @@ data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
 poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
 # ----------------------------------   DATA CLEANING   ------------------------------- #
-data = Preprocessing.data_preprocessing(data)
+#data = Preprocessing.data_preprocessing(data)
 
 
 # ----------------------------------   TEST THEO ----------------------------------------#
@@ -68,14 +68,25 @@ print(stats_aoi)
 
 tbp=clean_aois[["delta","timestamp","AOI"]]
 
+aoi=[["L","r","Left"],["F","g","Front"],["R","y","Right"],["P","b","Primary"],["S","c","Secondary"]]
 L ='r'
 F='g'
 R='y'
 P='b'
 S='c'
-colors = np.where(clean_aois["AOI"]=="L",L,np.where(clean_aois["AOI"]=="R",R,np.where(clean_aois["AOI"]=="P",P,np.where(clean_aois["AOI"]=="S",S,np.where(clean_aois["AOI"]=="F",F,F)))))
-colors=tuple(colors)
+import matplotlib.pyplot as plt
 
-tbp.plot(kind='scatter',x=1,y=0,c=colors,legend=True)
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+ax1.set_xlabel("Temps de vol ( ms) ")
+ax1.set_ylabel("Temps passé sur chaque AOI sans transition( ms) ")
+
+for a in aoi:
+    aoigraph=clean_aois[clean_aois["AOI"]==a[0]]
+    aoigraph=aoigraph[["timestamp","delta"]]
+    ax1.scatter(aoigraph["timestamp"],aoigraph["delta"],c=a[1],label=a[2])
+plt.legend(loc='upper left');
+plt.show()
+
 chain=pfa.chain_AOI(pivot,liste_aoi)
 print(chain)
