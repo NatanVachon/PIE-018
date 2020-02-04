@@ -25,6 +25,11 @@ import numpy as np
 
 data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
+#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
+
+#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
+
+
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
@@ -40,8 +45,8 @@ poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 # ----------------------------------   TEST THEO ----------------------------------------#
 
 DataMove = cb.plane_and_head_turning(data)
-cb.freq_head_turning(DataMove)
-
+cb.graph_results_turning(DataMove)
+cb.temporal_graph(DataMove)
 # ----------------------------------   AOI CLASSIFICATION   ------------------------------- #
 # Zone computation
 zones = aoic.compute_zones(data, poi)
