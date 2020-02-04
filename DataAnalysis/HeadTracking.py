@@ -4,6 +4,8 @@ Created on Tue Nov 19 13:12:29 2019
 
 @author: natan
 """
+import sys
+sys.path.insert(1, 'Features')
 
 import AOI_classifier as aoic
 from AOI_classifier import ZoneGraphics

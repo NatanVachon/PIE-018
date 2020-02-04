@@ -15,14 +15,14 @@ import Pattern_From_AOI as pfa
 import creation_baseMove as cb
 import Preprocessing
 import TrafficSearch as ts
+import Constants as const
 
-import numpy as np
 # Data path
-#data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
 
-data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
+#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
 
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
@@ -48,10 +48,9 @@ zones = aoic.compute_zones(data, poi)
 aois = aoic.classify_aois(zones, data)
 
 # ----------------------------------   TRANSITION EXTRACTION   ------------------------------- #
-seuil = 10
 #Sort les différents états : delta= temps resté sur cet AOI
 ###SEUIL = seuil en ms pour considérer que c'est pas un outlier
-clean_aois=pfa.clean_AOI(aois, seuil)
+clean_aois=pfa.clean_AOI(aois, const.AOI_MIN_TIME)
 
 #LISTE DES ETATS
 liste_aoi=clean_aois["AOI"].tolist()
