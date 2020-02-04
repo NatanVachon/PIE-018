@@ -66,6 +66,18 @@ def count_transitions(AOI_pd):
 
 
 
+def tete_fixe_tunnel(aois,t1,t2):
+    ref=aois.loc[t1,"AOI"]
+    fixe=(aois.loc[aois.loc["FD_TIME_MS"]<t2].loc[aois.loc["FD_TIME_MS"]>t1,"AOI"]==ref).all
+    return fixe
+
+
+def tete_fixe(data,t1,t2,seuil=5):
+    local=data.loc[data["FD_TIME_MS"]<t2].loc[data["FD_TIME_MS"]>t1,["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_PITCH"]]
+    mean=loc.mean()
+    fixe=((abs(local-mean)>seuil).all()).all()
+    return fixe
+
 def count_AOI(AOI_pd,full_pd):
     AOI=AOI_pd.drop_duplicates(subset="AOI").sort_values("AOI").set_index("AOI")
     AOI["count"]=0
@@ -93,11 +105,10 @@ def chain_AOI(pivot,liste_aoi):
             if liste_aois.count(i+j)>0:
                 for k in np.delete(aois,np.where(aois==j)):
                     if liste_aois.count(i+j+k)>0:
-                        for l in np.delete(aois,np.where(aois==k)):
-                            temp=liste_aois.count(i+j+k+l)
-                            if temp>0 :
-                                aoi_chain.loc[i+j+k+l,"count"]=temp
+                        temp=liste_aois.count(i+j+k)
+                        if temp>0 :
+                            aoi_chain.loc[i+j+k,"count"]=temp
             
     aoi_chain["pourcent"]=100*aoi_chain.loc[:,"count"]/aoi_chain["count"].sum()
-    aoi_chain=aoi_chain.loc[aoi_chain["pourcent"]>3]
+    aoi_chain=aoi_chain.loc[aoi_chain["pourcent"]>1]
     return aoi_chain
