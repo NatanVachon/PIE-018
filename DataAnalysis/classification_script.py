@@ -16,22 +16,22 @@ import Pattern_From_AOI as pfa
 import creation_baseMove as cb
 import Preprocessing
 import TrafficSearch as ts
+import Constants as const
 import graphs as grh
 import numpy as np
 import matplotlib.pyplot as plt
+
 # Data path
-#data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
 
-data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
+#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
 
 #data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
 
-#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
-
-
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
+
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 # Parse flight data and points of interest
@@ -55,10 +55,9 @@ zones = aoic.compute_zones(data, poi)
 aois = aoic.classify_aois(zones, data)
 
 # ----------------------------------   TRANSITION EXTRACTION   ------------------------------- #
-seuil = 10
 #Sort les différents états : delta= temps resté sur cet AOI
 ###SEUIL = seuil en ms pour considérer que c'est pas un outlier
-clean_aois=pfa.clean_AOI(aois, seuil)
+clean_aois=pfa.clean_AOI(aois, const.AOI_MIN_TIME)
 
 
 #Energy ( gyro carré intégré)
@@ -96,14 +95,12 @@ print(stats_aoi)
 
 ## Listes des chaines trouvées
 chain=pfa.chain_AOI(pivot,liste_aoi)
-aoi_chain=pd.DataFrame(columns=["count"])    
+aoi_chain=pd.DataFrame(columns=["count"])
 colormaps=["summer","autumn","winter"]
 
 
 
 
-
-    
 ######Graph tps(AOI)
 labels=tuple(stats_aoi["%_time"])
 stats_aoi["%_time"].plot.pie(legend=True,autopct='%i%%')

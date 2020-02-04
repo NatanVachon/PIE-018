@@ -4,10 +4,8 @@ Created on Tue Jan 21 14:15:43 2020
 
 @author: natan
 """
-
-############################################ PARAMETERS ############################################
-TS_DURATION = 20 #[s]
-TS_MIN_HEADING_AMPLITUDE = 180 #[°]
+############################################ IMPORTS ############################################
+import Constants as const
 
 ############################################ FUNCTIONS ############################################
 
@@ -25,10 +23,10 @@ def traffic_search(data, date):
         print("Given date out of bounds")
 
     # Look for heading min and max at +/- TS_DURATION / 2
-    dindex = int(TS_DURATION / 0.1 / 2) # Convertion from time to indexes
+    dindex = int(const.TRAFFIC_SEARCH_WINDOW / 0.1 / 2) # Convertion from time to indexes
     sub_list = data.loc[index - dindex: index + dindex, "FD_PILOT_HEAD_HEADING"]
     min_heading, max_heading = min(sub_list), max(sub_list)
-    amplitude_check = max_heading - min_heading >= TS_MIN_HEADING_AMPLITUDE
+    amplitude_check = max_heading - min_heading >= const.TRAFFIC_SEARCH_MIN_HEADING_AMPLITUDE
 
     # Check that every AOI has been checked
     sub_list = data.loc[index - dindex: index + dindex, "AOI"].tolist()
