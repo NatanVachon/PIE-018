@@ -114,13 +114,14 @@ def chain_AOI(pivot,liste_aoi):
     return aoi_chain
 
 
-#d'une fonction qui marche entre t1 et t2 est appelée 
-def cont(fonction,data,nom,seuil):
+#d'une fonction qui marche entre t1 et t2 est appelée pour 
+#detecter toutes les plages supérieures à seuil surlesquels c'est vrai
+def cont(fonction,data,seuil):
     true=[]
     seuil_cherche=seuil/2
     tr=False
-    maxt=max(data["FD_TIME_MS"])-seuil_cherche
-    ta=min(data["FD_TIME_MS"])
+    maxt=max(data["FD_TIME_S"])-seuil_cherche
+    ta=min(data["FD_TIME_S"])
     while ta<=maxt :
         tb=ta+seuil_cherche
         
@@ -132,27 +133,13 @@ def cont(fonction,data,nom,seuil):
         ta=ta+seuil_cherche    
     true2=[]
     i=0
-    for while i<=len(true)-1:
-        if true[i][1]==true[i+1][0]:
-            true2.append((true[i][0],true[i+1][1]))
+    print(true)
+    while i<=len(true)-1:
+        a=i
+        while i<=len(true)-2 and true[i][1]==true[i+1][0] :
             i+=1
+            print(i)
+        if true[i][1]-true[a][0]>=seuil :
+            true2.append((true[a][0],true[i][1]))
+        i=i+1
     return true2
-
-
-def cont(fonction,data,nom,seuil=0.5):
-    true=[]
-    seuil_cherche=seuil
-    tr=False
-    maxt=max(data["FD_TIME_MS"])-seuil_cherche
-    ta=min(data["FD_TIME_MS"])
-    while ta<=maxt :
-        tb=ta+seuil_cherche
-        
-        trprec=tr
-        tr=fonction(data,ta,tb,seuil_cherche)
-        
-        if tr:
-            true.append((ta,tb))
-        ta=ta+seuil_cherche    
-   
-    return true
