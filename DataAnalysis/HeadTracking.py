@@ -6,9 +6,11 @@ Created on Tue Nov 19 13:12:29 2019
 """
 import sys
 sys.path.insert(1, 'Features')
+sys.path.insert(2, 'Preprocessing')
 
 import AOI_classifier as aoic
 from AOI_classifier import ZoneGraphics
+import Preprocessing
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -78,6 +80,7 @@ if __name__ == "__main__":
     # Initialization
     data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
     poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
+    data, poi = Preprocessing.data_preprocessing(data, poi)
     poi_timestamps = get_poi_timestamps(data, poi)
 
     # Zones definition
