@@ -8,8 +8,8 @@ Created on Tue Feb  4 14:54:16 2020
 
 AOI_MIN_TIME = 0.01 #[s]
 TRAFFIC_SEARCH_WINDOW = 0.02 #[s]
-TRAFFIC_SEARCH_MIN_HEADING_AMPLITUDE = 180 #[°]
-SEUIL_TETE_FIXE=2 #[s]
+TRAFFIC_SEARCH_MIN_HEADING_AMPLITUDE = 130. #[°]
+SEUIL_TETE_FIXE=2. #[s]
 ROLLING_MEAN=10 # nombre de sample sur lequel faire un rolling mean de l'energie
 
 # Pour creation_baseMove

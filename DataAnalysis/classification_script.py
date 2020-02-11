@@ -23,14 +23,12 @@ import graphs as grh
 import numpy as np
 import matplotlib.pyplot as plt
 
-ts.traffic_search
-
 # Data path
-#data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
+data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
-data_path ="d:/Drive/PIE/LOG/04_02_2020/guilhem"
+#data_path ="d:/Drive/PIE/LOG/04_02_2020/guilhem"
 
 #data_path ="d:/Drive/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
@@ -72,7 +70,7 @@ energy.plot()
 plt.grid()
 txt = 'Energie moyenne : '+str(mean);
 #text(data["FS_TIME_S"].max()/2,0.3,txt)
-plt.show(block=True)
+plt.show()
 
 ###
 
@@ -115,7 +113,7 @@ grh.hist_transitions(chain)
 
 ############### GRAPH HIST AOI
 ###############RECHERCHE DE VARIABLE CONTINUES
-recherche_traffic = cont(ts.traffic_search,data,2)
+recherche_traffic = pfa.cont(ts.traffic_search,data,5)
 
 
 
