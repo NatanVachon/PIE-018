@@ -3,6 +3,8 @@
 Created on Tue Jan  7 13:48:05 2020
 
 @author: natan
+
+Penser à effectuer le data reconstruction sur tous les dossiers pour les vols a 100ms
 """
 
 import sys
@@ -24,7 +26,7 @@ import matplotlib.pyplot as plt
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
-data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
 #data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
 
@@ -35,7 +37,7 @@ data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guil
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 # Parse flight data and points of interest
-data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
+data = pd.read_csv(data_path + "/numData_100ms_.csv", sep=';')
 poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
 
