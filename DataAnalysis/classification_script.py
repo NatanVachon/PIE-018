@@ -26,6 +26,9 @@ import matplotlib.pyplot as plt
 # Data path
 data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
 
+#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_taupichef"
+data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/hugo/flight_04Feb2020_work"
+
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
 #data_path ="d:/Drive/PIE/LOG/04_02_2020/guilhem"
@@ -43,11 +46,6 @@ poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 data, poi = Preprocessing.data_preprocessing(data, poi)
 
 
-# ----------------------------------   TEST THEO ----------------------------------------#
-
-DataMove = cb.plane_and_head_turning(data)
-cb.graph_results_turning(DataMove)
-cb.temporal_graph(DataMove)
 # ----------------------------------   AOI CLASSIFICATION   ------------------------------- #
 # Zone computation
 zones = aoic.compute_zones(data, poi)
@@ -56,9 +54,24 @@ aois = aoic.classify_aois(zones, data)
 
 # ----------------------------------   TRANSITION EXTRACTION   ------------------------------- #
 #Sort les différents états : delta= temps resté sur cet AOI
-###SEUIL = seuil en ms pour considérer que c'est pas un outlier
+###SEUIL = seuil en s pour considérer que c'est pas un outlier
 clean_aois=pfa.clean_AOI(aois, const.AOI_MIN_TIME)
 
+
+# ----------------------------------   TEST VIRAGE    ----------------------------------------#
+
+DataMove = cb.plane_and_head_turning(data)
+aois_temp = aois[const.dt_sw_turn: -const.dt_sw_turn]
+
+DataMove = DataMove.join(aois_temp)
+
+del aois_temp
+
+cb.graph_results_turning(DataMove) #pour l'avoir a nouveau, remplacer R par 1 et L par -1 dans datamove
+#cb.temporal_graph(DataMove)
+
+
+# ----------------------------------   TEST VIRAGE    ----------------------------------------#
 
 #Energy ( gyro carré intégré)
 energy,peak,mean=enr.energy(data,const.ROLLING_MEAN)
