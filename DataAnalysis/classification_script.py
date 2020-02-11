@@ -116,7 +116,7 @@ grh.hist_transitions(chain)
 
 
 ###############RECHERCHE DE VARIABLE CONTINUES
-recherche_traffic = cont(ts.traffic_search,data,2)
+recherche_traffic = pfa.cont(ts.traffic_search,data,0.2)
 
 
 
