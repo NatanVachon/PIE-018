@@ -68,12 +68,12 @@ def count_transitions(AOI_pd):
 
 def tete_fixe_tunnel(aois,t1,t2):
     ref=aois.loc[t1,"AOI"]
-    fixe=(aois.loc[aois.loc["FD_TIME_MS"]<t2].loc[aois.loc["FD_TIME_MS"]>t1,"AOI"]==ref).all
+    fixe=(aois.loc[aois.loc["FD_TIME_S"]<t2].loc[aois.loc["FD_TIME_MS"]>t1,"AOI"]==ref).all
     return fixe
 
 
 def tete_fixe(data,t1,t2,seuil=5):
-    local=data.loc[data["FD_TIME_MS"]<t2].loc[data["FD_TIME_MS"]>t1,["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_PITCH"]]
+    local=data.loc[data["FD_TIME_S"]<t2].loc[data["FD_TIME_MS"]>t1,["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_PITCH"]]
     mean=local.mean()
     fixe=((abs(local-mean)>seuil).all()).all()
     return fixe
@@ -133,12 +133,10 @@ def cont(fonction,data,seuil):
         ta=ta+seuil_cherche    
     true2=[]
     i=0
-    print(true)
     while i<=len(true)-1:
         a=i
         while i<=len(true)-2 and true[i][1]==true[i+1][0] :
             i+=1
-            print(i)
         if true[i][1]-true[a][0]>=seuil :
             true2.append((true[a][0],true[i][1]))
         i=i+1
