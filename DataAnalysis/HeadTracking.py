@@ -14,7 +14,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
 
 data = pd.DataFrame()
 poi = pd.DataFrame()
@@ -89,5 +89,5 @@ if __name__ == "__main__":
     gZone_zi2 = ZoneGraphics(zones[4], (0, 1, 1))
 
     # Launch animation
-    ani = FuncAnimation(fig, update_animation, init_func=init_animation, frames=[i for i in range(1900, len(data))], blit=True, interval = 40)
+    ani = FuncAnimation(fig, update_animation, init_func=init_animation, frames=[i for i in range(len(data))], blit=True, interval = 40)
     plt.show()
