@@ -6,15 +6,17 @@ Created on Tue Nov 19 13:12:29 2019
 """
 import sys
 sys.path.insert(1, 'Features')
+sys.path.insert(2, 'Preprocessing')
 
 import AOI_classifier as aoic
 from AOI_classifier import ZoneGraphics
+import Preprocessing
 
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
+data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
 
 data = pd.DataFrame()
 poi = pd.DataFrame()
@@ -49,7 +51,7 @@ def get_poi_timestamps(data, poi):
     timestamps = []
 
     for k in range(len(poi)):
-        timestamps.append(next(i for i in data.index if data.at[i, "FD_TIME_MS"] > poi.at[k, "FD_TIME_MS"]))
+        timestamps.append(next(i for i in data.index if data.at[i, "FD_TIME_S"] > poi.at[k, "FD_TIME_S"]))
 
     return timestamps
 
@@ -78,6 +80,7 @@ if __name__ == "__main__":
     # Initialization
     data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
     poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
+    data, poi = Preprocessing.data_preprocessing(data, poi)
     poi_timestamps = get_poi_timestamps(data, poi)
 
     # Zones definition

@@ -23,7 +23,7 @@ Reminder :
 #########################       PARAMETRES       ##############################
 ###############################################################################
 
-threshold = 2
+#threshold = 2
 
 ###############################################################################
 #########################       FUNCTION       ################################
@@ -40,10 +40,12 @@ def data_preprocessing(data, poi):
     data["FD_TIME_MS"].astype("float")
     data["FD_TIME_MS"] -= t0
     data["FD_TIME_MS"] *= 0.001
+    data = data.rename(columns={"FD_TIME_MS": "FD_TIME_S"})
 
     poi["FD_TIME_MS"].astype("float")
     poi["FD_TIME_MS"] -= t0
     poi["FD_TIME_MS"] *= 0.001
+    poi = poi.rename(columns={"FD_TIME_MS": "FD_TIME_S"})
 
     ####### Columns names
     """

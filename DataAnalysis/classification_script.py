@@ -23,19 +23,20 @@ import graphs as grh
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Data path
-#data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+ts.traffic_search
 
 
-#THEO
+
+
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_taupichef"
-data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/hugo/flight_04Feb2020_work"
+#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/hugo/flight_04Feb2020_work"
 
 
-#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
+#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
-#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
+data_path ="d:/Drive/PIE/LOG/04_02_2020/guilhem"
 
+#data_path ="d:/Drive/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
@@ -44,9 +45,9 @@ data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/hugo/flight_04Feb
 data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
 poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
-
 # ----------------------------------   DATA PREPROCESSING   ------------------------------- #
 data, poi = Preprocessing.data_preprocessing(data, poi)
+
 
 # ----------------------------------   AOI CLASSIFICATION   ------------------------------- #
 # Zone computation
@@ -76,13 +77,16 @@ cb.graph_results_turning(DataMove) #pour l'avoir a nouveau, remplacer R par 1 et
 # ----------------------------------   TEST VIRAGE    ----------------------------------------#
 
 #Energy ( gyro carré intégré)
-energy,peak=enr.energy(data)
+energy,peak,mean=enr.energy(data,const.ROLLING_MEAN)
 
-energy=energy/energy.max()
+#energy=energy/energy.max()
 
 ####
 energy.plot()
-
+plt.grid()
+txt = 'Energie moyenne : '+str(mean);
+#text(data["FS_TIME_S"].max()/2,0.3,txt)
+plt.show(block=True)
 
 ###
 
@@ -101,7 +105,7 @@ print(transition) #transition = tableau des transitions
 ###############################################################################
 
 # Check if a traffic search happened around 100s
-print("Check for traffic check around 100s:", ts.traffic_search(data, 100))
+print("Check for traffic check around 100s:", ts.traffic_search(data, 30, 40))
 
 #Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
 stats_aoi=pfa.count_AOI(clean_aois ,aois)
@@ -114,8 +118,6 @@ aoi_chain=pd.DataFrame(columns=["count"])
 colormaps=["summer","autumn","winter"]
 
 
-
-
 ######Graph tps(AOI)
 labels=tuple(stats_aoi["%_time"])
 stats_aoi["%_time"].plot.pie(legend=True,autopct='%i%%')
@@ -125,7 +127,9 @@ grh.hist_count_aoi(stats_aoi)
 grh.hist_transitions(chain)
 
 
-###############GRAPH HIST AOI
+############### GRAPH HIST AOI
+###############RECHERCHE DE VARIABLE CONTINUES
+recherche_traffic = cont(ts.traffic_search,data,2)
 
 
 
