@@ -49,7 +49,7 @@ def get_poi_timestamps(data, poi):
     timestamps = []
 
     for k in range(len(poi)):
-        timestamps.append(next(i for i in data.index if data.at[i, "FD_TIME_MS"] > poi.at[k, "FD_TIME_MS"]))
+        timestamps.append(next(i for i in data.index if data.at[i, "FD_TIME_S"] > poi.at[k, "FD_TIME_S"]))
 
     return timestamps
 

@@ -24,9 +24,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Data path
-#data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
 
-data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
+#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
 #data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
 
@@ -37,12 +37,11 @@ data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxi
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 # Parse flight data and points of interest
-data = pd.read_csv(data_path + "/numData_100ms_.csv", sep=';')
+data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
 poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
-
 # ----------------------------------   DATA PREPROCESSING   ------------------------------- #
-#data, poi = Preprocessing.data_preprocessing(data, poi)
+data, poi = Preprocessing.data_preprocessing(data, poi)
 
 
 # ----------------------------------   TEST THEO ----------------------------------------#
@@ -88,7 +87,7 @@ print(transition) #transition = tableau des transitions
 ###############################################################################
 
 # Check if a traffic search happened around 100s
-print("Check for traffic check around 100s:", ts.traffic_search(data, 100))
+print("Check for traffic check around 100s:", ts.traffic_search(data, 30, 40))
 
 #Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
 stats_aoi=pfa.count_AOI(clean_aois ,aois)
