@@ -9,7 +9,7 @@ import sys
 sys.path.insert(1, 'Preprocessing')
 sys.path.insert(2, 'Features')
 sys.path.insert(3, 'Graphs')
-
+import energy as enr
 import AOI_classifier as aoic
 import pandas as pd
 import Pattern_From_AOI as pfa
@@ -18,6 +18,8 @@ import Preprocessing
 import TrafficSearch as ts
 import Constants as const
 import graphs as grh
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
@@ -57,6 +59,19 @@ aois = aoic.classify_aois(zones, data)
 ###SEUIL = seuil en ms pour considérer que c'est pas un outlier
 clean_aois=pfa.clean_AOI(aois, const.AOI_MIN_TIME)
 
+
+#Energy ( gyro carré intégré)
+energy,peak=enr.energy(data)
+
+energy=energy/energy.max()
+
+####
+energy.plot()
+
+
+###
+
+
 #LISTE DES ETATS
 liste_aoi=clean_aois["AOI"].tolist()
 print("AOI nettoyés")
@@ -82,6 +97,7 @@ print(stats_aoi)
 chain=pfa.chain_AOI(pivot,liste_aoi)
 aoi_chain=pd.DataFrame(columns=["count"])
 colormaps=["summer","autumn","winter"]
+
 
 
 
