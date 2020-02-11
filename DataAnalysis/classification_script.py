@@ -67,6 +67,7 @@ energy,peak=enr.energy(data)
 
 ####
 energy.plot()
+plt.grid()
 
 
 ###
