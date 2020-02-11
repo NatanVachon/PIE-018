@@ -4,7 +4,7 @@ Created on Tue Jan  7 10:13:43 2020
 
 @author: Simon
 """
-
+import Constants as const
 import pandas as pd
 import numpy as np
 #This function will compress all the data to keep only the first row for each AOI, allowing to detect patterns after
@@ -72,7 +72,7 @@ def tete_fixe_tunnel(aois,t1,t2):
     return fixe
 
 
-def tete_fixe(data,t1,t2,seuil=5):
+def tete_fixe(data,t1,t2,seuil=const.SEUIL_TETE_FIXE):
     local=data.loc[data["FD_TIME_S"]<t2].loc[data["FD_TIME_MS"]>t1,["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_PITCH"]]
     mean=local.mean()
     fixe=((abs(local-mean)>seuil).all()).all()
