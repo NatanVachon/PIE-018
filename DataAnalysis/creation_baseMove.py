@@ -60,7 +60,7 @@ def plane_and_head_turning(df):
     roulis = df.loc[:,["FD_AHRS_ROLL"]]
     cap = df.loc[:,["FD_AHRS_HEADING"]]
     #cap = df.loc[:,["FD_GPS_COURSE"]]       #  CHANGER TOUS LES HEADING EN COURSE SI COURSE DISPO
-    cap_time = df.loc[:,["FD_TIME_MS"]]
+    cap_time = df.loc[:,["FD_TIME_S"]]
     
     
     for t in range(const.dt_sw_turn, len(df)-const.dt_sw_turn):
@@ -73,7 +73,7 @@ def plane_and_head_turning(df):
 
         vect = cap_current.FD_AHRS_HEADING.values
         #vect = cap_current.FD_GPS_COURSE.values
-        vect_time = cap_current_time.FD_TIME_MS.values
+        vect_time = cap_current_time.FD_TIME_S.values
         
 
         deriv=[]
@@ -106,7 +106,7 @@ def plane_and_head_turning(df):
             #"<<<------"
             
         elif (cap_head.iloc[t].values >= df.at[4, "FD_PILOT_HEAD_HEADING"]) :
-=======
+
 
     ######### CODE HEAD_TURNING
 
