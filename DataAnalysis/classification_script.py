@@ -28,7 +28,7 @@ data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guil
 
 #data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
 
-#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_maxime"
+data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
 
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 
@@ -40,7 +40,7 @@ poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
 
 # ----------------------------------   DATA PREPROCESSING   ------------------------------- #
-#data, poi = Preprocessing.data_preprocessing(data, poi)
+data, poi = Preprocessing.data_preprocessing(data, poi)
 
 
 # ----------------------------------   TEST THEO ----------------------------------------#

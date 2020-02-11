@@ -74,7 +74,7 @@ def tete_fixe_tunnel(aois,t1,t2):
 
 def tete_fixe(data,t1,t2,seuil=5):
     local=data.loc[data["FD_TIME_MS"]<t2].loc[data["FD_TIME_MS"]>t1,["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_PITCH"]]
-    mean=loc.mean()
+    mean=local.mean()
     fixe=((abs(local-mean)>seuil).all()).all()
     return fixe
 
@@ -112,3 +112,47 @@ def chain_AOI(pivot,liste_aoi):
     aoi_chain["pourcent"]=100*aoi_chain.loc[:,"count"]/aoi_chain["count"].sum()
     aoi_chain=aoi_chain.loc[aoi_chain["pourcent"]>1]
     return aoi_chain
+
+
+#d'une fonction qui marche entre t1 et t2 est appelée 
+def cont(fonction,data,nom,seuil):
+    true=[]
+    seuil_cherche=seuil/2
+    tr=False
+    maxt=max(data["FD_TIME_MS"])-seuil_cherche
+    ta=min(data["FD_TIME_MS"])
+    while ta<=maxt :
+        tb=ta+seuil_cherche
+        
+        trprec=tr
+        tr=fonction(data,ta,tb,seuil_cherche)
+        
+        if tr:
+            true.append((ta,tb))
+        ta=ta+seuil_cherche    
+    true2=[]
+    i=0
+    for while i<=len(true)-1:
+        if true[i][1]==true[i+1][0]:
+            true2.append((true[i][0],true[i+1][1]))
+            i+=1
+    return true2
+
+
+def cont(fonction,data,nom,seuil=0.5):
+    true=[]
+    seuil_cherche=seuil
+    tr=False
+    maxt=max(data["FD_TIME_MS"])-seuil_cherche
+    ta=min(data["FD_TIME_MS"])
+    while ta<=maxt :
+        tb=ta+seuil_cherche
+        
+        trprec=tr
+        tr=fonction(data,ta,tb,seuil_cherche)
+        
+        if tr:
+            true.append((ta,tb))
+        ta=ta+seuil_cherche    
+   
+    return true
