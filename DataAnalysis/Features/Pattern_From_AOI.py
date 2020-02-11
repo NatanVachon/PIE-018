@@ -117,6 +117,19 @@ def chain_AOI(pivot,liste_aoi):
 #d'une fonction qui marche entre t1 et t2 est appelée pour 
 #detecter toutes les plages supérieures à seuil surlesquels c'est vrai
 def cont(fonction,data,seuil):
+    
+    """#Cont permet d'appeler une fonction ( notée FTest) sur un dataframe entier
+    #Ftest doit renvoyer un booléen si testée entre t1 et t2 sur l'array 
+    #La fonction renverra un array des plages les plus grandes,supérieures à Seuil où Ftest est vrai
+        fonction : fonction appelée comme ceci fonction(data,t1,t2) qui renvoie un booléen
+        data : fichier/dataframe surlequel sera appelé fonction
+        seuil : plage mini retenue
+    exemple :
+        Data FD_TIME_S :0-----ta--ta+4-------tb----tb+7-------tc----tc+7-----end
+            Ftest      :000000111100000000011111110000000000111111100000000
+    cont(Ftest,data,5) renverra [(tb,tb+7),(tc,tc+7)]
+        
+    """
     true=[]
     seuil_cherche=seuil/2
     tr=False
@@ -126,7 +139,7 @@ def cont(fonction,data,seuil):
         tb=ta+seuil_cherche
         
         trprec=tr
-        tr=fonction(data,ta,tb,seuil_cherche)
+        tr=fonction(data,ta,tb)
         
         if tr:
             true.append((ta,tb))
