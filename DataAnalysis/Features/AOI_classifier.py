@@ -52,11 +52,11 @@ def compute_zones(data, poi):
     pitches, headings = [data.at[i, "FD_PILOT_HEAD_PITCH"] for i in timestamps], [data.at[i, "FD_PILOT_HEAD_HEADING"] for i in timestamps]
 
     # Define zones
-    zone_left = Zone('L', -180, headings[3], -180, 180)
+    zone_left = Zone('L', -180., headings[3], -180., 180.)
     zone_front = Zone('F', headings[3], headings[4], pitches[2], pitches[1])
-    zone_right = Zone('R', headings[4], 180, -180, 180)
-    zone_i1 = Zone('P', headings[3], headings[7], pitches[5], pitches[2])
-    zone_i2 = Zone('S', headings[7], headings[4], pitches[5], pitches[2])
+    zone_right = Zone('R', headings[4], 180., -180., 180.)
+    zone_i1 = Zone('P', headings[3], headings[7], -90., pitches[2])
+    zone_i2 = Zone('S', headings[7], headings[4], -90., pitches[2])
 
     return [zone_left, zone_front, zone_right, zone_i1, zone_i2]
 

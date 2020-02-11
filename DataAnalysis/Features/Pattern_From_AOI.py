@@ -28,7 +28,7 @@ def count_transitions(AOI_pd):
     AOI_pd["prev_transition"]=AOI_pd["prev_AOI"]+"=>"+AOI_pd["AOI"]
 
     AOI=AOI_pd.drop_duplicates(subset="AOI").sort_values("AOI").set_index("AOI")
-   
+
     transition=AOI_pd.drop_duplicates(subset="transition").sort_values("transition").set_index("transition")
     transition.loc[:,"count"]=0
     transition.loc[:,"average_time_bef"]=0
@@ -47,7 +47,7 @@ def count_transitions(AOI_pd):
         transition.loc[a,"%to"]=int((100*transition.loc[a,"count"]/AOI_pd.loc[AOI_pd["next_AOI"]==AOI2].count()["next_AOI"]))
     for b in transition.index:
         transition.loc[b,"%count"]=int((100*transition.loc[b,"count"]/transition["count"].sum()))
-    
+
     ind=[a for a in AOI.index]
     col=ind.copy()
     col.append("0")
@@ -99,7 +99,7 @@ def count_AOI(AOI_pd,full_pd):
 def chain_AOI(pivot,liste_aoi):
     aois=pivot.index.copy().to_numpy()
     liste_aois="".join(liste_aoi)
-    aoi_chain=pd.DataFrame(columns=["count"])    
+    aoi_chain=pd.DataFrame(columns=["count"])
     for i in aois:
         for j in np.delete(aois,np.where(aois==i)):
             if liste_aois.count(i+j)>0:
@@ -108,18 +108,18 @@ def chain_AOI(pivot,liste_aoi):
                         temp=liste_aois.count(i+j+k)
                         if temp>0 :
                             aoi_chain.loc[i+j+k,"count"]=temp
-            
+
     aoi_chain["pourcent"]=100*aoi_chain.loc[:,"count"]/aoi_chain["count"].sum()
     aoi_chain=aoi_chain.loc[aoi_chain["pourcent"]>1]
     return aoi_chain
 
 
-#d'une fonction qui marche entre t1 et t2 est appelée pour 
+#d'une fonction qui marche entre t1 et t2 est appelée pour
 #detecter toutes les plages supérieures à seuil surlesquels c'est vrai
 def cont(fonction,data,seuil):
-    
+
     """#Cont permet d'appeler une fonction ( notée FTest) sur un dataframe entier
-    #Ftest doit renvoyer un booléen si testée entre t1 et t2 sur l'array 
+    #Ftest doit renvoyer un booléen si testée entre t1 et t2 sur l'array
     #La fonction renverra un array des plages les plus grandes,supérieures à Seuil où Ftest est vrai
         fonction : fonction appelée comme ceci fonction(data,t1,t2) qui renvoie un booléen
         data : fichier/dataframe surlequel sera appelé fonction
@@ -128,7 +128,7 @@ def cont(fonction,data,seuil):
         Data FD_TIME_S :0-----ta--ta+4-------tb----tb+7-------tc----tc+7-----end
             Ftest      :000000111100000000011111110000000000111111100000000
     cont(Ftest,data,5) renverra [(tb,tb+7),(tc,tc+7)]
-        
+
     """
     true=[]
     seuil_cherche=seuil/2
@@ -137,13 +137,13 @@ def cont(fonction,data,seuil):
     ta=min(data["FD_TIME_S"])
     while ta<=maxt :
         tb=ta+seuil_cherche
-        
+
         trprec=tr
         tr=fonction(data,ta,tb)
-        
+
         if tr:
             true.append((ta,tb))
-        ta=ta+seuil_cherche    
+        ta=ta+seuil_cherche
     true2=[]
     i=0
     while i<=len(true)-1:
