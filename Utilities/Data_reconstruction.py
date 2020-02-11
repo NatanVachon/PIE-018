@@ -25,8 +25,19 @@ import os
 #foldername = r"E:\flight_24avril2019_163835"
 #foldername = r"D:\###HERE###\1. R&D\3. Data\formation_leo\flight_29avril2019_171339"
 
-foldername = "C:\\Users\\h.corbille\\Desktop\\Safetyn\\Data_processing\\Data_test_filtering"
+#foldername = "C:\\Users\\h.corbille\\Desktop\\Safetyn\\Data_processing\\Data_test_filtering"
 
+foldername ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/theo/flight_04Feb2020_work/"
+"""
+flight_04Feb2020_work
+hugo
+leonard
+maxime
+natan
+paul
+simon
+theo
+"""
 #if not os.path.isdir(foldername + r"\\processed"):
 #    os.mkdir(foldername + r"\\processed")
 
@@ -36,7 +47,7 @@ basename10 = "numData_10ms_"
 basename5 = "numData_5ms_"
 
 #headerImu = ['t_log', 'ax', 'ay', 'az', 'gx', 'gy', 'gz', 'mx', 'my', 'mz', 't']
-
+"""
 #############
 # 5ms files #
 #############
@@ -49,7 +60,7 @@ if fileList:
     
     imuData = pd.concat(datasetsList, axis = 0, ignore_index = True)
     imuData.columns = pd.read_csv(fileList[0], nrows = 1, sep = ';').columns
-    imuData.to_csv(foldername+ '\\' + basename5, sep = ';', index=False)
+    imuData.to_csv(foldername+ '\\' + 'numData_5ms', sep = ';', index=False)
     del imuData
 
 ##############
@@ -64,14 +75,14 @@ if fileList:
     
     imuData = pd.concat(datasetsList, axis = 0, ignore_index = True)
     imuData.columns = pd.read_csv(fileList[0], nrows = 1, sep = ';').columns
-    imuData.to_csv(foldername+ '\\' + basename10, sep = ';', index=False)
+    imuData.to_csv(foldername+ '\\' + 'numData_10ms', sep = ';', index=False)
     del imuData
-
+"""
 ###############
 # 100ms files #
 ###############
-fileList = glob.glob(foldername + '\\' + basename100 + '*.csv')
-fileList = sorted(fileList, key = lambda filename : int(filename[len(foldername + '\\' + basename100):-4]))
+fileList = glob.glob(foldername + basename100 + '*.csv')
+fileList = sorted(fileList, key = lambda filename : int(filename[len(foldername + basename100):-4]))
 datasetsList = []
 if fileList:
     for file in fileList:
@@ -79,9 +90,9 @@ if fileList:
     
     ahrsData = pd.concat(datasetsList, axis = 0, ignore_index = True)
     ahrsData.columns = pd.read_csv(fileList[0], nrows = 1, sep = ';').columns
-    ahrsData.to_csv(foldername+ '\\' + basename100, sep = ';', index=False)
+    ahrsData.to_csv(foldername + 'numData_100ms.csv', sep = ';', index=False)
     del ahrsData
-
+"""
 #################
 ## 1000ms files #
 #################
@@ -94,5 +105,6 @@ if fileList:
     
     gpsData = pd.concat(datasetsList, axis = 0, ignore_index = True)
     gpsData.columns = pd.read_csv(fileList[0], nrows = 1, sep = ';').columns
-    gpsData.to_csv(foldername+ '\\' + basename1000, sep = ';', index=False)
+    gpsData.to_csv(foldername+ '\\' + 'numData_1000ms', sep = ';', index=False)
     del gpsData
+"""

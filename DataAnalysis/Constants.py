@@ -5,15 +5,20 @@ Created on Tue Feb  4 14:54:16 2020
 @author: natan
 """
 
-AOI_MIN_TIME = 10 #[ms]
-TRAFFIC_SEARCH_WINDOW = 20 #[ms]
+AOI_MIN_TIME = 0.1 #[s]
+TRAFFIC_SEARCH_WINDOW = 0.2 #[s]
 TRAFFIC_SEARCH_MIN_HEADING_AMPLITUDE = 180 #[°]
 
 
 # Pour creation_baseMove
 
 dt_sw_turn = 4 # nombre de valeurs pour prendre la moyenne du roulis, et derivee instantanee du defilement de cap
-head_turn_value = 10 # A PARAMETRER EN FONCTION DE LA CROIX <----- !!!
+#head_turn_value = 10 # A PARAMETRER EN FONCTION DE LA CROIX <----- !!!
+
+
+#head_turn_value_left = data.at[3, "FD_PILOT_HEAD_HEADING"]
+#head_turn_value_right = data.at[4, "FD_PILOT_HEAD_HEADING"]
+
 plane_turn_value = 15 # inclinaison des ailes minimale pour considerer un virage
 derive_cap = 1 # on considere un virage lorsque la derive de cap est > a 1'/s
 last_t_to_check = 100 # on regarde 10 sec avant debut virage, et 10 sec avant la fin pour le dernier regard
