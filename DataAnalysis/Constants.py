@@ -5,6 +5,7 @@ Created on Tue Feb  4 14:54:16 2020
 @author: natan
 """
 
+
 AOI_MIN_TIME = 0.01 #[s]
 TRAFFIC_SEARCH_WINDOW = 0.02 #[s]
 TRAFFIC_SEARCH_MIN_HEADING_AMPLITUDE = 180 #[°]
