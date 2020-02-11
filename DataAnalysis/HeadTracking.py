@@ -16,7 +16,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
+data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
 
 data = pd.DataFrame()
 poi = pd.DataFrame()

@@ -17,6 +17,23 @@ import Constants as const
 #   [bool] Is the traffic search done
 
 def traffic_search(data, t1, t2):
+    """
+
+    Parameters
+    ----------
+    data : DataFrame
+        Onboard measurements with AOI column attached.
+    t1 : float
+        Begin date of the search period.
+    t2 : float
+        End date of the search period.
+
+    Returns
+    -------
+    bool
+        Is the traffic search done ?
+
+    """
     # Get closest index
     index_t1 = next((i for i in range(len(data)) if data.at[i, "FD_TIME_S"] > t1), None)
     index_t2 = next((i for i in range(len(data)) if data.at[i, "FD_TIME_S"] > t2), None)

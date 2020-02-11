@@ -100,8 +100,6 @@ aoi_chain=pd.DataFrame(columns=["count"])
 colormaps=["summer","autumn","winter"]
 
 
-
-
 ######Graph tps(AOI)
 labels=tuple(stats_aoi["%_time"])
 stats_aoi["%_time"].plot.pie(legend=True,autopct='%i%%')
@@ -111,7 +109,7 @@ grh.hist_count_aoi(stats_aoi)
 grh.hist_transitions(chain)
 
 
-###############GRAPH HIST AOI
+############### GRAPH HIST AOI
 
 
 
