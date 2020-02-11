@@ -20,9 +20,9 @@ import Constants as const
 import graphs as grh
 
 # Data path
-data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
+#data_path = "d:/natan/Documents/PIE/Logs/flight_10Dec2019_guilhem"
 
-#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
+data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_guilhem"
 
 #data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
 

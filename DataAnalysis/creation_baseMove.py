@@ -9,9 +9,8 @@ Reminder :
     
     plane_turning :
         
-    s'adapter par rapport a la croix pour head turn
+    !!!!! s'adapter par rapport a la croix pour head turn
     preciser les virages pas bien engagés
-    aller voir avant et apres virage av ion, si la tete tourne
     
     !!!!! difference de time stamp pour duree virage
     
@@ -26,23 +25,18 @@ Reminder :
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt 
-#%matplotlib inline
+import Constants as const
 
 ###############################################################################
 #########################       PARAMETRES       ##############################
 ###############################################################################
 
-threshold_turn = 4 # ???
+dt_sw_turn = 4 # nombre de valeurs pour prendre la moyenne du roulis, et derivee instantanee du defilement de cap
 head_turn_value = 10 # A PARAMETRER EN FONCTION DE LA CROIX <----- !!!
 plane_turn_value = 15 # inclinaison des ailes minimale pour considerer un virage
 derive_cap = 1 # on considere un virage lorsque la derive de cap est > a 1'/s
 
-###############################################################################
-#########################       CODE PRELIM       #############################
-###############################################################################
-
-#DataMove = pd.DataFrame(columns = ['turning_plane','turning_head'])
-
+last_t_to_check = 100 # on regarde 10 sec avant debut virage, et 10 sec avant la fin pour le dernier regard
 ###############################################################################
 ############################     FONCTIONS     ################################
 ###############################################################################
@@ -70,11 +64,11 @@ def plane_and_head_turning(df):
     #cap_head_time = df.loc[:,["FD_TIME_MS"]]
     
     
-    for t in range(threshold_turn, len(df)-threshold_turn):
+    for t in range(const.dt_sw_turn, len(df)-const.dt_sw_turn):
         
-        roulis_current = roulis.iloc[t-threshold_turn:t+threshold_turn]
-        cap_current = cap.iloc[t-threshold_turn:t+threshold_turn]
-        cap_current_time = cap_time.iloc[t-threshold_turn:t+threshold_turn]
+        roulis_current = roulis.iloc[t-const.dt_sw_turn:t+const.dt_sw_turn]
+        cap_current = cap.iloc[t-const.dt_sw_turn:t+const.dt_sw_turn]
+        cap_current_time = cap_time.iloc[t-const.dt_sw_turn:t+const.dt_sw_turn]
         
         moyenne_roulis = roulis_current.mean().FD_AHRS_ROLL
         
@@ -89,11 +83,11 @@ def plane_and_head_turning(df):
     
         moyenne_deriv_cap = np.mean(deriv)
 
-        if (moyenne_roulis <= - plane_turn_value) & (moyenne_deriv_cap >= derive_cap) :
+        if (moyenne_roulis <= - const.plane_turn_value) & (moyenne_deriv_cap >= const.derive_cap) :
             DataMove.loc[t,'turning_plane'] = -1
             #"<<<------"
             
-        elif (moyenne_roulis >= plane_turn_value) & (moyenne_deriv_cap >= derive_cap) :
+        elif (moyenne_roulis >= const.plane_turn_value) & (moyenne_deriv_cap >= const.derive_cap) :
             DataMove.loc[t,'turning_plane'] = 1
             #"------>>>"
         else:
@@ -104,11 +98,11 @@ def plane_and_head_turning(df):
     
     for t in range(len(df)):
            
-        if (cap_head.iloc[t].values <= -head_turn_value) :
+        if (cap_head.iloc[t].values <= - const.head_turn_value) :
             DataMove.loc[t,'turning_head'] = -1
             #"<<<------"
             
-        elif (cap_head.iloc[t].values >= head_turn_value) :
+        elif (cap_head.iloc[t].values >= const.head_turn_value) :
             DataMove.loc[t,'turning_head'] =  1
             #"------>>>"
                 
@@ -162,7 +156,7 @@ def graph_results_turning(dm):
                 
             # Regards avant le virage
             p = t
-            while (p > t-100) & (abs(turn_head.iloc[p].values) != 1) :
+            while (p > t - const.last_t_to_check) & (abs(turn_head.iloc[p].values) != 1) :
                 p-=1
             temp_time = p
             if turn_head.iloc[p].values == 1 :
@@ -170,7 +164,7 @@ def graph_results_turning(dm):
             else:
                 last_look_before_turning.append(["Left",1,round((t-p)*0.1,1)])
             p-=1
-            while (p > t-100) & (turn_head.iloc[p].values == turn_head.iloc[temp_time].values):
+            while (p > t - const.last_t_to_check) & (turn_head.iloc[p].values == turn_head.iloc[temp_time].values):
                 p-=1
                 last_look_before_turning[nb_virage][1] += 1
             last_look_before_turning[nb_virage][1] = round(last_look_before_turning[nb_virage][1]/10,1)
@@ -208,7 +202,7 @@ def graph_results_turning(dm):
                 
             # Regards avant de sortir du virage
             p = t
-            while (p > t-100) & (abs(turn_head.iloc[p].values) != 1) :
+            while (p > t - const.last_t_to_check) & (abs(turn_head.iloc[p].values) != 1) :
                 p-=1
             temp_time = p
             if turn_head.iloc[p].values == 1 :
@@ -216,7 +210,7 @@ def graph_results_turning(dm):
             else:
                 last_look_before_end.append(["Left",1,round((t-p)*0.1,1)])
             p-=1
-            while (p > t-100) & (turn_head.iloc[p].values == turn_head.iloc[temp_time].values):
+            while (p > t - const.last_t_to_check) & (turn_head.iloc[p].values == turn_head.iloc[temp_time].values):
                 p-=1
                 last_look_before_end[nb_virage-1][1] += 1
             last_look_before_end[nb_virage-1][1] = round(last_look_before_end[nb_virage-1][1]/10,1)
@@ -369,29 +363,7 @@ def graph_results_turning(dm):
         print(virage_unsecure)
         
         
-""" 
-    # defining labels 
-    activities = ['Securised turn', 'Non secure'] 
-    #portion covered by each label 
-    slices = [virage_secure,len(virage_unsecure)] 
-    # color for each label 
-    colors = ['g', 'r'] 
-    # plotting the pie chart 
-    plt.pie(slices, labels = activities, colors=colors,  
-            startangle=90, shadow = True, 
-            radius = 1.2, autopct = '%1.1f%%') 
-    # title the pie
-    plt.title("Security before turns", pad = 20)
-    # plotting legend 
-    plt.legend() 
-    # showing the plot 
-    plt.show()
-    if virage_unsecure != []:
-        print ("Details of the unsecure turning situation :")
-        print(virage_unsecure)
-    
-
-
+"""
 
 ####    PIE CHART DE TOUS LES VIRAGES
 
@@ -422,6 +394,3 @@ def graph_results_turning(dm):
         # showing the plot 
         plt.show()
 """       
-
-
-### A CODER changement dinclinaison precede d'un regard (DEBUT ET FIN VIRAGE)
