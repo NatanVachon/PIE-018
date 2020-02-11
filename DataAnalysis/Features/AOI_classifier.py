@@ -46,32 +46,33 @@ def compute_zones(data, poi):
     timestamps = []
     # Get index for each poi
     for k in range(len(poi)):
-        timestamps.append(next(i for i in data.index if data.at[i, "FD_TIME_MS"] > poi.at[k, "FD_TIME_MS"]))
+        timestamps.append(next(i for i in data.index if data.at[i, "FD_TIME_S"] > poi.at[k, "FD_TIME_S"]))
 
     # Get point for each poi
     pitches, headings = [data.at[i, "FD_PILOT_HEAD_PITCH"] for i in timestamps], [data.at[i, "FD_PILOT_HEAD_HEADING"] for i in timestamps]
 
     # Define zones
-    zone_left = Zone('L', -180, headings[5], -180, 180)
-    zone_front = Zone('F', headings[5], headings[6], pitches[4], pitches[3])
-    zone_right = Zone('R', headings[6], 180, -180, 180)
-    zone_i1 = Zone('P', headings[5], headings[9], pitches[7], pitches[4])
-    zone_i2 = Zone('S', headings[9], headings[6], pitches[7], pitches[4])
+    zone_left = Zone('L', -180, headings[3], -180, 180)
+    zone_front = Zone('F', headings[3], headings[4], pitches[2], pitches[1])
+    zone_right = Zone('R', headings[4], 180, -180, 180)
+    zone_i1 = Zone('P', headings[6], headings[7], pitches[5], pitches[2])
+    zone_i2 = Zone('S', headings[7], headings[8], pitches[5], pitches[2])
 
     return [zone_left, zone_front, zone_right, zone_i1, zone_i2]
 
 def classify_aoi(zones, pitch, heading):
+    # Check for each zone if we are in
     for i in range(len(zones)):
         if zones[i].inZone(heading, pitch):
             return zones[i].name
 
-    # If not in any zone
+    # Else return Null
     return 'N'
 
 def classify_aois(zones, data):
     aois = [classify_aoi(zones, data.at[i, "FD_PILOT_HEAD_PITCH"], data.at[i, "FD_PILOT_HEAD_HEADING"]) for i in range(len(data))]
     df = pd.DataFrame()
-    df["timestamp"] = data["FD_TIME_MS"]
+    df["timestamp"] = data["FD_TIME_S"]
     df["AOI"] = aois
 
     # Save aois in data

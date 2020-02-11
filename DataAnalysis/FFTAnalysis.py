@@ -23,12 +23,6 @@ x = data["FD_PILOT_HEAD_PITCH"]
 f = np.linspace(-0.5 * fs, 0.5 * fs, len(x))
 N = len(x)
 
-# f, t, Sxx = signal.spectrogram(x, fs)
-# plt.pcolormesh(t, f, Sxx)
-# plt.ylabel('Frequency [Hz]')
-# plt.xlabel('Time [sec]')
-# plt.show()
-
 # FFT
 xFFT = fft.fftshift(fft.fft(x))
 xFFT, f = xFFT[N//2:], f[N//2:] # Keep half of the fft
