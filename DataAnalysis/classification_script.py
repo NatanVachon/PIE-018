@@ -23,15 +23,16 @@ import graphs as grh
 import numpy as np
 import matplotlib.pyplot as plt
 
+ts.traffic_search
+
 # Data path
-data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
+#data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
-#data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_simon"
+data_path ="d:/Drive/PIE/LOG/04_02_2020/guilhem"
 
-data_path ="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
-
+#data_path ="d:/Drive/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
 
 #data_path="d:/Drive/PIE/LOG/10_12_log/Logs/flight_10Dec2019_guilhem"
@@ -62,13 +63,16 @@ clean_aois=pfa.clean_AOI(aois, const.AOI_MIN_TIME)
 
 
 #Energy ( gyro carré intégré)
-energy,peak=enr.energy(data)
+energy,peak,mean=enr.energy(data,const.ROLLING_MEAN)
 
-energy=energy/energy.max()
+#energy=energy/energy.max()
 
 ####
 energy.plot()
-
+plt.grid()
+txt = 'Energie moyenne : '+str(mean);
+#text(data["FS_TIME_S"].max()/2,0.3,txt)
+plt.show(block=True)
 
 ###
 
@@ -110,6 +114,8 @@ grh.hist_transitions(chain)
 
 
 ############### GRAPH HIST AOI
+###############RECHERCHE DE VARIABLE CONTINUES
+recherche_traffic = cont(ts.traffic_search,data,2)
 
 
 

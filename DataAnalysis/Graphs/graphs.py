@@ -30,7 +30,7 @@ def time_temps_aoi(clean_aois):
     
     
 
-def hist_time_aoi(stats_aoi,aoi):
+def hist_time_aoi(stats_aoi):
     fig=plt.figure()
     ax1=fig.add_subplot(111)
     ax1.set_xlabel("Vol Guilhem")
