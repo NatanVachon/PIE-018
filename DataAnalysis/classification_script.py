@@ -20,12 +20,11 @@ import Preprocessing
 import TrafficSearch as ts
 import Constants as const
 import graphs as grh
-import numpy as np
 import matplotlib.pyplot as plt
 
 # Data path
-data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
-
+#data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
+data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/hugo/flight_04Feb2020_163644_nominal"
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_taupichef"
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/hugo/flight_04Feb2020_work"
 
