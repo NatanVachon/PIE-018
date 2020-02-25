@@ -52,17 +52,17 @@ Donne les instants ou la tête tourne a droite ou a gauche. head_turn_value regl
 
 def plane_and_head_turning(df):
 
-    
+
     DataMove = pd.DataFrame(columns = ['turning_plane'])
-    
-    ######### CODE PLANE_TURNING      
-    
+
+    ######### CODE PLANE_TURNING
+
     roulis = df.loc[:,["FD_AHRS_ROLL"]]
     cap = df.loc[:,["FD_AHRS_HEADING"]]
     #cap = df.loc[:,["FD_GPS_COURSE"]]       #  CHANGER TOUS LES HEADING EN COURSE SI COURSE DISPO
     cap_time = df.loc[:,["FD_TIME_S"]]
-    
-    
+
+
     for t in range(const.dt_sw_turn, len(df)-const.dt_sw_turn):
 
         roulis_current = roulis.iloc[t-const.dt_sw_turn:t+const.dt_sw_turn]
@@ -74,7 +74,7 @@ def plane_and_head_turning(df):
         vect = cap_current.FD_AHRS_HEADING.values
         #vect = cap_current.FD_GPS_COURSE.values
         vect_time = cap_current_time.FD_TIME_S.values
-        
+
 
         deriv=[]
         for k in range(len(vect)-1):
@@ -94,17 +94,17 @@ def plane_and_head_turning(df):
             DataMove.loc[t,'turning_plane'] = 0
             #"^^^"
 
-            
+
     return(DataMove)
-                    
-    ######### CODE HEAD_TURNING             
-"""    
+
+    ######### CODE HEAD_TURNING
+"""
     for t in range(len(df)):
-           
+
         if (cap_head.iloc[t].values <= df.at[3, "FD_PILOT_HEAD_HEADING"]) :
             DataMove.loc[t,'turning_head'] = -1
             #"<<<------"
-            
+
         elif (cap_head.iloc[t].values >= df.at[4, "FD_PILOT_HEAD_HEADING"]) :
 
 
@@ -125,8 +125,8 @@ def plane_and_head_turning(df):
             DataMove.loc[t,'turning_head'] = 0
             #"^^^"
 
-"""   
-   
+"""
+
 def temporal_graph(dm):
     plt.figure()
     plt.plot(dm.loc[:,["turning_plane"]])
@@ -151,19 +151,19 @@ def graph_results_turning(dm):
 
     turn_plane = dm.loc[:,["turning_plane"]]
     turn_head = dm.loc[:,["AOI"]]
-    
+
 
     for t in range(len(dm)-1):
 
         # NOUVEAU VIRAGE
         if abs(turn_plane.iloc[t+1].values) == 1 and turn_plane.iloc[t].values == 0:
-            
+
             turning_plane.append(1)
             if turn_head.iloc[t+1].values == 'R':
                 turning_head.append([1])
             if turn_head.iloc[t+1].values == 'L':
                 turning_head.append([-1])
-            else: 
+            else:
                 turning_head.append([0])
 
             # Regards avant le virage
@@ -172,20 +172,20 @@ def graph_results_turning(dm):
                 p-=1
             temp_time = p
             if turn_head.iloc[p].values == 'R' :
-                last_look_before_turning.append(["Right",1,round(dm.loc[t,"timestamp"]-dm.loc[p,"timestamp"],1)]) ### indique le cote de la tete en premier, le nb de secondes en second, et cb de secondes cetait avant le virage en 3eme variable
+                last_look_before_turning.append(["Right",1,round(dm.loc[t,"FD_TIME_S"]-dm.loc[p,"FD_TIME_S"],1)]) ### indique le cote de la tete en premier, le nb de secondes en second, et cb de secondes cetait avant le virage en 3eme variable
             elif turn_head.iloc[p].values == 'L' :
-                last_look_before_turning.append(["Left",1,round(dm.loc[t,"timestamp"]-dm.loc[p,"timestamp"],1)])
+                last_look_before_turning.append(["Left",1,round(dm.loc[t,"FD_TIME_S"]-dm.loc[p,"FD_TIME_S"],1)])
             else:
                 last_look_before_turning.append(["NONE",0,0])
             p-=1
             while (p > t - const.last_t_to_check) & (turn_head.iloc[p].values == turn_head.iloc[temp_time].values):
                 p-=1
-                
+
                 #last_look_before_turning[nb_virage][1] += 1
-            
-            last_look_before_turning[nb_virage][1] = round(dm.loc[temp_time,"timestamp"]-dm.loc[p,"timestamp"],1)
-            
-        
+
+            last_look_before_turning[nb_virage][1] = round(dm.loc[temp_time,"FD_TIME_S"]-dm.loc[p,"FD_TIME_S"],1)
+
+
         # VIRAGE QUI CONTINUE
         if abs(turn_plane.iloc[t+1].values) == 1 and abs(turn_plane.iloc[t].values) == 1:
             turning_plane[nb_virage] += 1
@@ -222,9 +222,9 @@ def graph_results_turning(dm):
                 p-=1
             temp_time = p
             if turn_head.iloc[p].values == 'R' :
-                last_look_before_end.append(["Right",1,round(dm.loc[t,"timestamp"]-dm.loc[p,"timestamp"],1)]) ### indique le cote de la tete en premier, le nb de secondes en second, et cb de secondes cetait avant le virage en 3eme variable
+                last_look_before_end.append(["Right",1,round(dm.loc[t,"FD_TIME_S"]-dm.loc[p,"FD_TIME_S"],1)]) ### indique le cote de la tete en premier, le nb de secondes en second, et cb de secondes cetait avant le virage en 3eme variable
             elif turn_head.iloc[p].values == 'L' :
-                last_look_before_end.append(["Left",1,round(dm.loc[t,"timestamp"]-dm.loc[p,"timestamp"],1)])
+                last_look_before_end.append(["Left",1,round(dm.loc[t,"FD_TIME_S"]-dm.loc[p,"FD_TIME_S"],1)])
             else :
                 last_look_before_end.append(["NONE",0,0])
             p-=1
@@ -232,7 +232,7 @@ def graph_results_turning(dm):
                 p-=1
 
                 #last_look_before_end[nb_virage-1][1] += 1
-            last_look_before_end[nb_virage-1][1] = round(dm.loc[temp_time,"timestamp"]-dm.loc[p,"timestamp"],1)
+            last_look_before_end[nb_virage-1][1] = round(dm.loc[temp_time,"FD_TIME_S"]-dm.loc[p,"FD_TIME_S"],1)
 
     #une valeur toutes les 0.1sec dans le tableau environ
     #Frequence_tete = []
@@ -259,7 +259,7 @@ def graph_results_turning(dm):
     print("Cote dernier regard avant de tourner/duree/il ya cb de secondes",last_look_before_turning)
     print("Cote dernier regard avant de revenir droit/duree/il ya cb de secondes",last_look_before_end)
 
-    
+
     #print("Temps moyen entre deux regards a l'exterieur pour chaque virage",Frequence_tete, " s")
 
 ####    PIE CHART AGREGE DES VIRAGES DROITE & GAUCHE
@@ -310,7 +310,7 @@ def graph_results_turning(dm):
 
         if last_look_before_turning[k][0] == "NONE":  # pas de regard !
             virage_unsecure[-1].append("NO look outside before turning ! - ")
-# Turn end security      
+# Turn end security
 
         if turn_side[k] == last_look_before_end[k][0]: # dernier regard du cote du virage
             virage_unsecure[-1].append("The last check before the end of the turn was to the "+last_look_before_end[k][0]+", turn was to the "+turn_side[k]+" -" )
@@ -321,8 +321,8 @@ def graph_results_turning(dm):
 
         if last_look_before_end[k][0] == "NONE":
             virage_unsecure[-1].append("NO look outside before quitting the turn ! - ")
-        
-        
+
+
         if  virage_unsecure[-1] == []:
             virage_secure +=1
             virage_unsecure.remove(virage_unsecure[-1]) # si tout est bon, on vire la liste vide

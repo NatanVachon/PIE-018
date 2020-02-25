@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 def energy(data, rolling_mean):
     energy=data[["FD_TIME_S","FD_GYRO_X","FD_GYRO_Y","FD_GYRO_Z"]]
-    energy["E"]=(energy["FD_GYRO_X"].pow(2)+energy["FD_GYRO_Y"].pow(2)+energy["FD_GYRO_Z"].pow(2)).apply(np.sqrt)
+    energy["E"]=(energy.loc[:, "FD_GYRO_X"].pow(2)+energy.loc[:, "FD_GYRO_Y"].pow(2)+energy.loc[:, "FD_GYRO_Z"].pow(2)).apply(np.sqrt)
     energy["e_mean"]=energy.E.rolling(rolling_mean).mean()
     energy["e_mean"].plot()
     mean_energy=energy["E"].sum()/(data["FD_TIME_S"].max())
