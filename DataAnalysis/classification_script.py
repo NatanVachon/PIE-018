@@ -30,7 +30,7 @@ data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/hugo/flight_04Feb2020_163
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
-#data_path ="d:/Drive/PIE/LOG/04_02_2020/guilhem"
+data_path ="d:/Drive/PIE/LOG/04_02_2020/guilhem"
 
 #data_path ="d:/Drive/PIE/Logs/Log PIE 4 feb/leonard/flight_04Feb2020_162341_work"
 #data_path = "c:/Users/Utilisateur/Desktop/PIE/10-12_log/Logs/flight_10Dec2019_simon"
@@ -125,6 +125,12 @@ grh.hist_transitions(chain)
 ############### GRAPH HIST AOI
 ###############RECHERCHE DE VARIABLE CONTINUES
 recherche_traffic = pfa.cont(ts.traffic_search,data,0.2)
+
+
+energy.plot()
+plt.grid()
+txt = 'Energie moyenne : '+str(mean);
+#text(data["FS_TIME_S"].max()/2,0.3,txt)
 tete_fixe_tunnel = pfa.cont(pfa.tete_fixe_tunnel, aois, 2.)
 
 

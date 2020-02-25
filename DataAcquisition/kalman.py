@@ -183,9 +183,10 @@ result=pd.DataFrame(track)
 result=q2euler_pd(result,"1")
 
 
-result["theta1"][0:index].plot()
-(XSENSE_QUAT["theta2"][0:index]).plot()
 fig_3 = plt.figure()
+(XSENSE_QUAT["theta2"][0:index]).plot(label="XSENSE")
+result["theta1"][0:index].plot(label="BNO")
+plt.legend()
 
 
 (result["psi1"][0:index]*math.pi/180).plot()
