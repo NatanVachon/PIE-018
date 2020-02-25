@@ -20,15 +20,15 @@ def time_temps_aoi(clean_aois):
     ax1 = fig.add_subplot(111)
     ax1.set_xlabel("Temps de vol ( ms) ")
     ax1.set_ylabel("Temps passé sur chaque AOI sans transition( ms) ")
-    
+
     for a in aoi:
         aoigraph=clean_aois[clean_aois["AOI"]==a[0]]
-        aoigraph=aoigraph[["timestamp","delta"]]
-        ax1.scatter(aoigraph["timestamp"],aoigraph["delta"],c=a[1],label=a[2])
+        aoigraph=aoigraph[["FD_TIME_S","delta"]]
+        ax1.scatter(aoigraph["FD_TIME_S"],aoigraph["delta"],c=a[1],label=a[2])
     plt.legend(loc='upper left');
     plt.show()
-    
-    
+
+
 
 def hist_time_aoi(stats_aoi):
     fig=plt.figure()
@@ -64,14 +64,14 @@ def hist_count_aoi(stats_aoi):
         leg.append(a[2])
     plt.legend(loc='upper left');
     plt.show()
-    
-    
-    
+
+
+
 def hist_transitions(chain):
     f=0
     h=0
     o=0
-    
+
     for a in chain.index:
         if "L" in a or "R" in a:
             chain.loc[a,"type"]="Horizontale"
@@ -90,7 +90,7 @@ def hist_transitions(chain):
     fig=plt.figure()
     ax1=fig.add_subplot(111)
     patch_handles = []
-    
+
     ax1.set_xlabel("Vol Guilhem")
     ax1.set_ylabel("Répartition transitions sur les AOI (#)")
     for a in chain.index:
@@ -102,6 +102,6 @@ def hist_transitions(chain):
                 x = 0.5*patch.get_width() + bl[0]
                 y = 0.5*patch.get_height() + bl[1]
                 ax1.text(x,y, chain.index[j], ha='center')
-    
-    
-    plt.show()    
+
+
+    plt.show()

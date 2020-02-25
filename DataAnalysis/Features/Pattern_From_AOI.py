@@ -9,10 +9,10 @@ import pandas as pd
 import numpy as np
 #This function will compress all the data to keep only the first row for each AOI, allowing to detect patterns after
 def clean_AOI(full_pd, seuil):
-    cols=["Timestamp","AOI","AHRS"]#columns to keep
+    cols=["FD_TIME_S","AOI","AHRS"]#columns to keep
     full_pd=full_pd.copy(deep=True)
     clean = full_pd.loc[(full_pd.loc[:,"AOI"].shift() != full_pd.loc[:,"AOI"])].copy(deep=True)
-    clean.loc[:,"delta"]=(-clean["timestamp"]+clean["timestamp"].shift(-1)).fillna(0)
+    clean.loc[:,"delta"]=(-clean["FD_TIME_S"]+clean["FD_TIME_S"].shift(-1)).fillna(0)
     clean=clean.loc[(clean["delta"]>seuil)]
 
     clean.reset_index(drop=True,inplace=True)
@@ -60,7 +60,7 @@ def count_transitions(AOI_pd):
             if a in transition.index:
                 pivot.loc[j,i]=transition.loc[a,"%from"]
     pivot=pivot.astype(int)
-    transition.drop(columns=["AOI","timestamp","next_AOI","average_time_aft","prev_AOI","prev_transition"],inplace=True)
+    transition.drop(columns=["AOI","FD_TIME_S","next_AOI","average_time_aft","prev_AOI","prev_transition"],inplace=True)
     return pivot,transition
 
 
@@ -68,12 +68,12 @@ def count_transitions(AOI_pd):
 
 def tete_fixe_tunnel(aois,t1,t2):
     ref=aois.loc[t1,"AOI"]
-    fixe=(aois.loc[aois.loc["FD_TIME_S"]<t2].loc[aois.loc["FD_TIME_MS"]>t1,"AOI"]==ref).all
+    fixe=(aois.loc[aois.loc[:, "FD_TIME_S"]<t2].loc[aois.loc[:, "FD_TIME_S"]>t1,"AOI"]==ref).all()
     return fixe
 
 
 def tete_fixe(data,t1,t2,seuil=const.SEUIL_TETE_FIXE):
-    local=data.loc[data["FD_TIME_S"]<t2].loc[data["FD_TIME_MS"]>t1,["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_PITCH"]]
+    local=data.loc[data["FD_TIME_S"]<t2].loc[data["FD_TIME_S"]>t1,["FD_PILOT_HEAD_HEADING","FD_PILOT_HEAD_PITCH"]]
     mean=local.mean()
     fixe=((abs(local-mean)>seuil).all()).all()
     return fixe
@@ -84,7 +84,7 @@ def count_AOI(AOI_pd,full_pd):
     AOI["average_time"]=0
     AOI["total_time"]=0
     AOI["%_time"]=0
-    total_time=full_pd["timestamp"].max()-full_pd["timestamp"].min()
+    total_time=full_pd["FD_TIME_S"].max()-full_pd["FD_TIME_S"].min()
 
     for a in AOI.index:
         AOI.loc[a,"count"]=AOI_pd.loc[a==AOI_pd["AOI"]].count()["AOI"]

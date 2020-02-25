@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_taupichef"
-data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/hugo/flight_04Feb2020_work"
+#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/hugo/flight_04Feb2020_work"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
@@ -79,6 +79,10 @@ energy,peak,mean=enr.energy(data,const.ROLLING_MEAN)
 #energy=energy/energy.max()
 
 ####
+energy.plot()
+plt.grid()
+txt = 'Energie moyenne : '+str(mean);
+#text(data["FS_TIME_S"].max()/2,0.3,txt)
 
 ###
 
@@ -123,10 +127,12 @@ grh.hist_transitions(chain)
 ###############RECHERCHE DE VARIABLE CONTINUES
 recherche_traffic = pfa.cont(ts.traffic_search,data,0.2)
 
+
 energy.plot()
 plt.grid()
 txt = 'Energie moyenne : '+str(mean);
 #text(data["FS_TIME_S"].max()/2,0.3,txt)
+tete_fixe_tunnel = pfa.cont(pfa.tete_fixe_tunnel, aois, 2.)
 
 
 
