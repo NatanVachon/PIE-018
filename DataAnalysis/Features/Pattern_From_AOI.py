@@ -154,3 +154,41 @@ def cont(fonction,data,seuil):
             true2.append((true[a][0],true[i][1]))
         i=i+1
     return true2
+
+def cont2(function, data, N):
+    time = list(data["FD_TIME_S"])
+    t_begin, t_end = time[0], time[-1]
+
+    vertices = np.linspace(t_begin, t_end, N)
+    candidates = []
+
+    # Look for each couple (i, j) such that f(i, j) is True
+    for j in range(1, len(vertices)):
+        for i in range(j):
+            if function(data, vertices[i], vertices[j]):
+                candidates.append((i, j))
+
+    # Check for solution existence
+    if len(candidates) == 0:
+        return None
+
+    # Sort each couple with distance j - i
+    comp = lambda ij: ij[1] - ij[0] # Comparator is the interval length
+    candidates = sorted(candidates, key=comp)
+
+    # For each couple in candidates, keep the non intersecting ones
+    disconnected_intervals = [candidates[0]]
+    for candidate in candidates[1:]:
+        intervals_copy = disconnected_intervals.copy()
+        is_intersecting = False
+        for interval in intervals_copy:
+            # Verify that intervals are disjoint
+            if not np.sign(candidate[0] - interval[0]) == np.sign(candidate[0] - interval[1])  \
+            == np.sign(candidate[1] - interval[0]) == np.sign(candidate[1] - interval[1]):
+                is_intersecting = True
+                break
+
+        if not is_intersecting:
+            disconnected_intervals.append(candidate)
+
+    # At this point, disconnected intervals contains smaller disconnected intervals such that f(i, j) is True
