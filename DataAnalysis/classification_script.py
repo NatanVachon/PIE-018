@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan  7 13:48:05 2020
-
-@author: natan
-
-Penser à effectuer le data reconstruction sur tous les dossiers pour les vols a 100ms
+Global script used to execute everything.
 """
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       IMPORTS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 import sys
 sys.path.insert(1, 'Preprocessing')
@@ -23,6 +23,10 @@ import graphs as grh
 import matplotlib.pyplot as plt
 import GlobalPlot as gp
 from Lookup import largest_lookup
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       DATA PARSING
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
@@ -43,6 +47,10 @@ data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/hugo/flight_04Feb2020_163
 data = pd.read_csv(data_path + "/numData_100ms.csv", sep=';')
 poi = pd.read_csv(data_path + "/flightEvent0.csv", sep=';')
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       EXECUTION
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 # ----------------------------------   DATA PREPROCESSING   ------------------------------- #
 data, poi = Preprocessing.data_preprocessing(data, poi)
 
@@ -55,7 +63,6 @@ aois = aoic.classify_aois(zones, data)
 
 # ----------------------------------   TRANSITION EXTRACTION   ------------------------------- #
 #Sort les différents états : delta= temps resté sur cet AOI
-###SEUIL = seuil en s pour considérer que c'est pas un outlier
 clean_aois=pfa.clean_AOI(aois, const.AOI_MIN_TIME)
 
 
@@ -72,21 +79,16 @@ cb.graph_results_turning(DataMove) #pour l'avoir a nouveau, remplacer R par 1 et
 #cb.temporal_graph(DataMove)
 
 
-# ----------------------------------   TEST VIRAGE    ----------------------------------------#
+# ----------------------------------   ENERGY    ----------------------------------------#
 
 #Energy ( gyro carré intégré)
 energy,peak,mean=enr.energy(data,const.ROLLING_MEAN)
 
-#energy=energy/energy.max()
-
-####
 energy.plot()
 plt.grid()
-txt = 'Energie moyenne : '+str(mean);
-#text(data["FS_TIME_S"].max()/2,0.3,txt)
+print('Energie moyenne : '+str(mean))
 
-###
-
+# ----------------------------------   AOIS ------------------------------- #
 
 #LISTE DES ETATS
 liste_aoi=clean_aois["AOI"].tolist()
@@ -96,10 +98,6 @@ print("Transitions comptées")
 
 print(pivot) #pivot = table de passage des transition
 print(transition) #transition = tableau des transitions
-
-###############################################################################
-#########################        FEATURES          ############################
-###############################################################################
 
 # Check if a traffic search happened around 100s
 print("Check for traffic check around 100s:", ts.traffic_search(data, 30, 40))
@@ -123,14 +121,12 @@ grh.hist_count_aoi(stats_aoi)
 grh.hist_transitions(chain)
 
 
-############### GRAPH HIST AOI
-###############RECHERCHE DE VARIABLE CONTINUES
-energy.plot()
-plt.grid()
+# ----------------------------------   TRAFFIC SEARCH   ------------------------------- #
 
 traffic_search = largest_lookup(ts.traffic_search,data, 20.)
 tete_fixe_tunnel = largest_lookup(pfa.tete_fixe_tunnel, aois, 2.)
 tete_fixe = largest_lookup(pfa.tete_fixe, data, 2.)
 
-### GLOBAL PLOT
+# ----------------------------------   GLOBAL PLOTS   ------------------------------- #
+
 gp.globalPlot(energy, tete_fixe=tete_fixe, tete_fixe_aoi=tete_fixe_tunnel, traffic_search=traffic_search)
