@@ -9,6 +9,7 @@ Created on Tue Feb  4 15:13:36 2020
 import scipy.signal
 import matplotlib.pyplot as plt
 import numpy as np
+
 def energy(data, rolling_mean):
     energy=data[["FD_TIME_S","FD_GYRO_X","FD_GYRO_Y","FD_GYRO_Z"]]
     energy["E"]=(energy.loc[:, "FD_GYRO_X"].pow(2)+energy.loc[:, "FD_GYRO_Y"].pow(2)+energy.loc[:, "FD_GYRO_Z"].pow(2)).apply(np.sqrt)

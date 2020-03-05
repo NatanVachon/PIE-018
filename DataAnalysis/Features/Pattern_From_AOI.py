@@ -155,7 +155,25 @@ def cont(fonction,data,seuil):
         i=i+1
     return true2
 
-def cont2(function, data, N):
+def cont2(function, data, N=10):
+    """
+    TODO: TERMINER
+
+    Parameters
+    ----------
+    function : bool function(data, t1, t2)
+        Base function callable on an interval [t1, t2].
+    data : DataFrame
+        Flight data.
+    N : int
+        Number of subdivisions used in the algorithm.
+
+    Returns
+    -------
+    disconnected_intervals : list of tuple.
+        Each tuple represents an interval in which function(data, time[i], time[j]) is true.
+
+    """
     time = list(data["FD_TIME_S"])
     t_begin, t_end = time[0], time[-1]
 
