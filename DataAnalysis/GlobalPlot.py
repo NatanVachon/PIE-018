@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 11 15:07:03 2020
-
-@author: natan
+This file contains utility functions for final plots
 """
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       IMPORTS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as pcs
 import numpy as np
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       CONSTANTS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 # Constants
 circle_radius = .08
@@ -22,19 +28,99 @@ traffic_search_color = 'b'
 turn_height = .2
 turn_color = 'g'
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       GLOBAL VARIABLES
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 # Global variable
 xx, yy = 1., 1.
 rect_height = .1
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       FUNCTIONS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 def create_rect(height, begin, end, color, alpha=1., hatch=None):
-    rect = pcs.Rectangle((begin, height - 0.5 * rect_height), end - begin, rect_height, linewidth=0, edgecolor=None, facecolor=color, alpha=alpha, hatch=hatch)
+    """
+    Clearer function to plot a rectangle on a plot.
+
+    Parameters
+    ----------
+    height : float Range([0, 1])
+        Height of the rectangle.
+    begin : float
+        Time at which the rectangle begins.
+    end : float
+        Time at which the rectangle ends.
+    color : Color
+        Color of the rectangle.
+    alpha : float Range([0, 1]), optional
+        Rectangle opacity. The default is 1..
+    hatch : char, optional
+        Rectangle hatch. The default is None.
+
+    Returns
+    -------
+    rect : Rectangle
+        Created rectangle.
+
+    """
+    rect = pcs.Rectangle((begin, height * yy - 0.5 * rect_height), end - begin, rect_height, linewidth=0, edgecolor=None, facecolor=color, alpha=alpha, hatch=hatch)
     return rect
 
 def create_circle(xy, radius, color, alpha=1., hatch=None):
+    """
+    Create an ellipse shaped that looks like a circle with the axis scale stretch.
+
+    Parameters
+    ----------
+    xy : tuple
+        Center of the circle.
+    radius : float
+        Circle radius.
+    color : Color
+        Circle color.
+    alpha : float Range([0, 1]), optional
+        Circle opacity. The default is 1..
+    hatch : char, optional
+        Circle hatch. The default is None.
+
+    Returns
+    -------
+    circle : Ellipse
+        Created circle.
+
+    """
     circle = pcs.Ellipse(xy, circle_radius * xx , circle_radius * yy , color=color, alpha=alpha, hatch=hatch)
     return circle
 
 def globalPlot(energy, tete_fixe=None, tete_fixe_aoi=None, traffic_search=None, turn=None):
+    """
+    Create the global plot containing:
+        - Energy
+        - Fix head intervals
+        - Fix head AOI intervals
+        - Traffic search intervals
+        - Turn intervals
+
+    Parameters
+    ----------
+    energy : DataFrame
+        Energy data.
+    tete_fixe : DataFrame, optional
+        Fix head data. The default is None.
+    tete_fixe_aoi : DataFrame, optional
+        Fix head AOI data. The default is None.
+    traffic_search : DataFrame, optional
+        Traffic search data. The default is None.
+    turn : DataFrame, optional
+        Turn data. The default is None.
+
+    Output
+    -------
+    Global plot.
+
+    """
     fig, ax = plt.subplots(1)
 
     # Energy plot
@@ -52,12 +138,12 @@ def globalPlot(energy, tete_fixe=None, tete_fixe_aoi=None, traffic_search=None, 
     # Create patches
     if tete_fixe is not None:
         for (begin, end) in tete_fixe:
-            rectangle = create_rect(tete_fixe_height * yy, begin, end, tete_fixe_color, alpha=0.8)
+            rectangle = create_rect(tete_fixe_height, begin, end, tete_fixe_color, alpha=0.8)
             ax.add_patch(rectangle)
 
     if tete_fixe_aoi is not None:
         for (begin, end) in tete_fixe_aoi:
-            rectangle = create_rect(tete_fixe_aoi_height * yy, begin, end, tete_fixe_aoi_color, alpha=0.8)
+            rectangle = create_rect(tete_fixe_aoi_height, begin, end, tete_fixe_aoi_color, alpha=0.8)
             ax.add_patch(rectangle)
 
     if traffic_search is not None:
@@ -67,7 +153,7 @@ def globalPlot(energy, tete_fixe=None, tete_fixe_aoi=None, traffic_search=None, 
 
     if turn is not None:
         for (begin, end) in turn:
-            rectangle = create_rect(turn_height * yy, begin, end, turn_color, alpha=0.8)
+            rectangle = create_rect(turn_height, begin, end, turn_color, alpha=0.8)
             ax.add_patch(rectangle)
 
     plt.grid()

@@ -22,6 +22,7 @@ import Constants as const
 import graphs as grh
 import matplotlib.pyplot as plt
 import GlobalPlot as gp
+from Lookup import largest_lookup
 
 # Data path
 #data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
@@ -127,9 +128,9 @@ grh.hist_transitions(chain)
 energy.plot()
 plt.grid()
 
-traffic_search = pfa.cont(ts.traffic_search,data, 20.)
-tete_fixe_tunnel = pfa.cont(pfa.tete_fixe_tunnel, aois, 2.)
-tete_fixe = pfa.cont(pfa.tete_fixe, data, 2.)
+traffic_search = largest_lookup(ts.traffic_search,data, 20.)
+tete_fixe_tunnel = largest_lookup(pfa.tete_fixe_tunnel, aois, 2.)
+tete_fixe = largest_lookup(pfa.tete_fixe, data, 2.)
 
 ### GLOBAL PLOT
 gp.globalPlot(energy, tete_fixe=tete_fixe, tete_fixe_aoi=tete_fixe_tunnel, traffic_search=traffic_search)
