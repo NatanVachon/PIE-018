@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan 21 14:15:43 2020
-
-@author: natan
+This file contains feature functions for traffic search functions
 """
-############################################ IMPORTS ############################################
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       IMPORTS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 import Constants as const
 
-############################################ FUNCTIONS ############################################
-
-# function name: traffic_search
-# Inputs:
-#   data [DataFrame]: Onboard measurements with AOI column attached
-#   date [float]: Moment at which we check if a traffic search happened (in seconds)
-# Output:
-#   [bool] Is the traffic search done
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                       FUNCTIONS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 def traffic_search(data, t1, t2):
     """
