@@ -15,7 +15,7 @@ import energy as enr
 import AOI_classifier as aoic
 import pandas as pd
 import Pattern_From_AOI as pfa
-import creation_baseMove as cb
+import analyze_turns as atu
 import Preprocessing
 import TrafficSearch as ts
 import Constants as const
@@ -66,17 +66,17 @@ aois = aoic.classify_aois(zones, data)
 clean_aois=pfa.clean_AOI(aois, const.AOI_MIN_TIME)
 
 
-# ----------------------------------   TEST VIRAGE    ----------------------------------------#
+# ----------------------------------   ANALYSE VIRAGE   ----------------------------------------#
 
-DataMove = cb.plane_and_head_turning(data)
-aois_temp = aois[const.dt_sw_turn: -const.dt_sw_turn]
+DataMove = atu.plane_and_head_turning(data)
+aois_temp = aois[const.DT_SW_TURN: -const.DT_SW_TURN]
 
 DataMove = DataMove.join(aois_temp)
 
 del aois_temp
 
-cb.graph_results_turning(DataMove) #pour l'avoir a nouveau, remplacer R par 1 et L par -1 dans datamove
-#cb.temporal_graph(DataMove)
+atu.graph_results_turning(DataMove) 
+#atu.temporal_graph(DataMove)
 
 
 # ----------------------------------   ENERGY    ----------------------------------------#

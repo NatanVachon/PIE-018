@@ -11,16 +11,16 @@ TRAFFIC_SEARCH_MIN_HEADING_AMPLITUDE = 130. #[°]
 
 SEUIL_TETE_FIXE = 2. #[s]
 
+ROLLING_MEAN = 10 # Length of the rolling mean window for energy computation
 
-dt_sw_turn = 4 # nombre de valeurs pour prendre la moyenne du roulis, et derivee instantanee du defilement de cap
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+                                                Constants creation_baseMove
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-# Length of the rolling mean window for energy computation
-ROLLING_MEAN = 10
+DT_SW_TURN = 4 # nombre de valeurs pour prendre la moyenne du roulis, et derivee instantanee du defilement de cap
 
-# Pour creation_baseMove
+PLANE_TURN_VALUE = 15 # inclinaison des ailes minimale pour considerer un virage
 
-dt_sw_turn = 4 # nombre de valeurs pour prendre la moyenne du roulis, et derivee instantanee du defilement de cap
+DERIVE_CAP = 1 # on considere un virage lorsque la derive de cap est > a 1'/s
 
-plane_turn_value = 15 # inclinaison des ailes minimale pour considerer un virage
-derive_cap = 1 # on considere un virage lorsque la derive de cap est > a 1'/s
-last_t_to_check = 100 # on regarde 10 sec avant debut virage, et 10 sec avant la fin pour le dernier regard
+LAST_T_TO_CHECK = 100 # on regarde 10 sec avant debut virage, et 10 sec avant la fin pour le dernier regard

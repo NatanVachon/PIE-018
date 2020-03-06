@@ -3,8 +3,6 @@
 """
 This file contains the functions to analyse turning situations
 
-
-
 """
 
 
@@ -17,22 +15,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 import Constants as const
 
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                                        FUNCTIONS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
-# Donne la direction du virage a chaque instant du vol.
-
-"""
-S'applique aux data de XPlane. Donne la direction du virage a chaque instant du vol. parametres a choisir ci-dessus (next update)
-+++
-Donne les instants ou la tête tourne a droite ou a gauche. head_turn_value reglee avec la croix (next update)
-"""
-
 def plane_and_head_turning(df):
+    """
+    Function that create a dateframe with all the direction of the plane's turns'
+
+    Parameters
+    ----------
+    df : panda Dataframe
+        dataframe with all the data collected about a flight, every 100ms.
+
+    Returns
+    -------
+    None.
+
+    """
 
 
     DataMove = pd.DataFrame(columns = ['turning_plane'])
@@ -41,7 +42,7 @@ def plane_and_head_turning(df):
 
     roulis = df.loc[:,["FD_AHRS_ROLL"]]
     cap = df.loc[:,["FD_AHRS_HEADING"]]
-    #cap = df.loc[:,["FD_GPS_COURSE"]]       #  CHANGER TOUS LES HEADING EN COURSE SI COURSE DISPO
+    #cap = df.loc[:,["FD_GPS_COURSE"]]       #  CHANGE ALL THE HEADING TO COURSE IF COURSE AVAILABLE
     cap_time = df.loc[:,["FD_TIME_S"]]
 
 
@@ -82,17 +83,43 @@ def plane_and_head_turning(df):
 
 
 def temporal_graph(dm):
+    """
+    Create the temporal graph about the dynamic of head turns and plane turns
+
+    Parameters
+    ----------
+    dm: panda Dataframe
+        dataframe with all the plane's turns and heads position about a flight, every 100ms.
+
+    Returns
+    -------
+    None.
+
+    """
     plt.figure()
     plt.plot(dm.loc[:,["turning_plane"]])
     plt.plot(dm.loc[:,["turning_head"]]*0.5)   #.replace(0, np.nan))
     plt.show()
 
 
-"""
-S'applique directement à Datamove. grce aux data crees par les deux fonctions precedentes.
-Donne la frequence de tournee de tete pendant le virage.
-"""
+
+
 def graph_results_turning(dm):
+    """
+
+    Applied directly on Datamove, thanks to data created by the two previous functions.
+    Give informations/graphs about turning situations (symetry during turns, security checks, explanations of non secure turns)
+
+    Parameters
+    ----------
+    dm: panda Dataframe
+        dataframe with all the plane's turns and heads position about a flight, every 100ms.
+
+    Returns
+    -------
+    None.
+
+    """
     nb_virage = 0
     turn_side = []
     nb_turn = 0
@@ -344,6 +371,7 @@ def graph_results_turning(dm):
 
 
 """
+Optional graph, not used right now
 
 ####    PIE CHART DE TOUS LES VIRAGES
 
