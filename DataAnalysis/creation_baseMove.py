@@ -244,19 +244,23 @@ def graph_results_turning(dm):
 ##############      LES SORTIES AFFICHEES
 
     print("Nombre de virages : ", nb_virage)
+    print()
     print("Coté de chaque virage : ", turn_side)
+    print()
     duree_virage = [round(float(i)*0.1,1) for i in turning_plane]
     print("Duree de chaque virage : ",duree_virage, " s")
-
+    print()
     for k in range(len(turning_head)):
         turning_head[k] = [round(float(i)*0.1,1) for i in turning_head[k]]
     print("Temps regard à l'exterieur pendant chaque virage",turning_head, " s")
-
+    print()
     nb_regards = []
     for i in range (len(turning_head)):
         nb_regards += [len(turning_head[i])]
     print("Nombre de regards a l'exterieur pour chaque virage :", nb_regards)
+    print()
     print("Cote dernier regard avant de tourner/duree/il ya cb de secondes",last_look_before_turning)
+    print()
     print("Cote dernier regard avant de revenir droit/duree/il ya cb de secondes",last_look_before_end)
 
 
