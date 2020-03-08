@@ -9,16 +9,16 @@ This file contains utility functions for final plots
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as pcs
-import numpy as np
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
                                                        CONSTANTS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 # Constants
-circle_radius = .08
+circle_radius = .05
 box_height = .1
 
+energy_color = 'k'
 tete_fixe_height = .8
 tete_fixe_color = 'r'
 tete_fixe_aoi_height = .6
@@ -133,7 +133,7 @@ def globalPlot(energy, tete_fixe=None, tete_fixe_aoi=None, traffic_search=None, 
     xx, yy = max(x), max(y)
     rect_height = box_height * yy
 
-    ax.plot(x, y, 'k-')
+    energy_line, = ax.plot(x, y, energy_color + '-')
 
     # Create patches
     if tete_fixe is not None:
@@ -156,5 +156,14 @@ def globalPlot(energy, tete_fixe=None, tete_fixe_aoi=None, traffic_search=None, 
             rectangle = create_rect(turn_height, begin, end, turn_color, alpha=0.8)
             ax.add_patch(rectangle)
 
-    plt.grid()
+    # Legend
+    energy_patch = pcs.Patch(color=energy_color, label='Energy')
+    tete_fixe_patch = pcs.Patch(color=tete_fixe_color, label='Fix head')
+    traffic_search_patch = pcs.Patch(color=traffic_search_color, label='Traffic search')
+    turn_patch = pcs.Patch(color=turn_color, label='Turns')
+    ax.legend(handles=[energy_patch, tete_fixe_patch, traffic_search_patch, turn_patch])
+
+    ax.set_title("Energy / turns / fix heads")
+
+    ax.grid()
     plt.show()
