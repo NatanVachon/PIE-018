@@ -31,10 +31,10 @@ from Lookup import largest_lookup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 # Data path
-#data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
+data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/guilhem/flight_04Feb2020_161253_nominal"
 #data_path = "d:/natan/Documents/PIE/Logs/Log PIE 4 feb/hugo/flight_04Feb2020_163644_nominal"
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_taupichef"
-data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/maxime/flight_04Feb2020_nominal"
+#data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Log_PIE_4_feb/maxime/flight_04Feb2020_nominal"
 
 #data_path ="/Users/theo_taupiac/Desktop/PIE_0018/Logs_1012/flight_10Dec2019_maxime"
 
@@ -77,7 +77,14 @@ DataMove = DataMove.join(aois_temp)
 
 del aois_temp
 
-A,B,C,D = atu.graph_results_turning(DataMove)
+turn_begin, turn_end, turn_duration, turn_direction = atu.graph_results_turning(DataMove)
+turns = [(turn_begin[i], turn_end[i]) for i in range(len(turn_begin))]
+
+#turns = pd.DataFrame()
+#turns["begin"] = turn_begin
+#turns["end"] = turn_end
+#turns["duration"] = turn_duration
+#turns["direction"] = turn_direction
 #atu.temporal_graph(DataMove)
 
 
@@ -131,4 +138,4 @@ tete_fixe = largest_lookup(pfa.tete_fixe, data, 2.)
 
 # ----------------------------------   GLOBAL PLOT   ------------------------------- #
 
-gp.globalPlot(energy, tete_fixe=tete_fixe, tete_fixe_aoi=tete_fixe_tunnel, traffic_search=traffic_search)
+gp.globalPlot(energy, tete_fixe=tete_fixe, tete_fixe_aoi=tete_fixe_tunnel, traffic_search=traffic_search, turn=turns)
