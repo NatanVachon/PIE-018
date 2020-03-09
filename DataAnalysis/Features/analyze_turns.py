@@ -117,7 +117,19 @@ def graph_results_turning(dm):
 
     Returns
     -------
-    None.
+    time_begin_turn : list
+        list of the timestamp of the beginning of the turn
+    
+    time_end_turn : list
+        list of the timestamp of the end of the turn
+    
+    duree_virage : list
+        list of the duration, all turns
+        
+    turn_side : list
+        list of the sides, all turns
+    
+    -- all these returns are used in the global plot --
 
     """
     nb_virage = 0
@@ -126,6 +138,9 @@ def graph_results_turning(dm):
 
     turning_plane = []
     turning_head = []
+    
+    time_begin_turn = []
+    time_end_turn = []
 
     last_look_before_turning = []
     last_look_before_end = []
@@ -140,6 +155,9 @@ def graph_results_turning(dm):
         if abs(turn_plane.iloc[t+1].values) == 1 and turn_plane.iloc[t].values == 0:
 
             turning_plane.append(1)
+            
+            time_begin_turn.append(round(dm.loc[t+1,"FD_TIME_S"],1))
+            
             if turn_head.iloc[t+1].values == 'R':
                 turning_head.append([1])
             if turn_head.iloc[t+1].values == 'L':
@@ -192,6 +210,9 @@ def graph_results_turning(dm):
         if turn_plane.iloc[t+1].values == 0 and abs(turn_plane.iloc[t].values) == 1 :
             nb_virage += 1
             nb_turn = 0
+            
+            time_end_turn.append(round(dm.loc[t+1,"FD_TIME_S"],1))
+            
             if turn_plane.iloc[t].values == 1 :
                 turn_side.append("Right")
             if turn_plane.iloc[t].values == -1 :
@@ -228,7 +249,7 @@ def graph_results_turning(dm):
     print()
     print("Coté de chaque virage : ", turn_side)
     print()
-    duree_virage = [round(float(i)*0.1,1) for i in turning_plane]
+    duree_virage = [round(time_end_turn[i] - time_begin_turn[i],1) for i in range(len(time_end_turn))]
     print("Duree de chaque virage : ",duree_virage, " s")
     print()
     for k in range(len(turning_head)):
@@ -243,6 +264,9 @@ def graph_results_turning(dm):
     print("Cote dernier regard avant de tourner/duree/il ya cb de secondes",last_look_before_turning)
     print()
     print("Cote dernier regard avant de revenir droit/duree/il ya cb de secondes",last_look_before_end)
+    print("Timestamp des débuts de virage",time_begin_turn)
+    print()
+    print("Timestamp des fins de virage",time_end_turn)
 
 
     #print("Temps moyen entre deux regards a l'exterieur pour chaque virage",Frequence_tete, " s")
@@ -369,6 +393,7 @@ def graph_results_turning(dm):
         print ("Details of the unsecure turning situation :")
         print(virage_unsecure)
 
+    return(time_begin_turn, time_end_turn, duree_virage, turn_side)
 
 """
 Optional graph, not used right now
