@@ -11,6 +11,8 @@ import sys
 sys.path.insert(1, 'Preprocessing')
 sys.path.insert(2, 'Features')
 sys.path.insert(3, 'Graphs')
+sys.path.insert(4, 'Utility')
+
 import energy as enr
 import AOI_classifier as aoic
 import pandas as pd
@@ -100,7 +102,7 @@ print(pivot) #pivot = table de passage des transition
 print(transition) #transition = tableau des transitions
 
 # Check if a traffic search happened around 100s
-print("Check for traffic check around 100s:", ts.traffic_search(data, 30, 40))
+print("Check for traffic check around 100s:", ts.traffic_search(data, 30., 40.))
 
 #Sort une compilation des difféerents AOI ( temps passé sur chaque, % du total...)
 stats_aoi=pfa.count_AOI(clean_aois ,aois)
@@ -127,6 +129,6 @@ traffic_search = largest_lookup(ts.traffic_search,data, 20.)
 tete_fixe_tunnel = largest_lookup(pfa.tete_fixe_tunnel, aois, 2.)
 tete_fixe = largest_lookup(pfa.tete_fixe, data, 2.)
 
-# ----------------------------------   GLOBAL PLOTS   ------------------------------- #
+# ----------------------------------   GLOBAL PLOT   ------------------------------- #
 
 gp.globalPlot(energy, tete_fixe=tete_fixe, tete_fixe_aoi=tete_fixe_tunnel, traffic_search=traffic_search)

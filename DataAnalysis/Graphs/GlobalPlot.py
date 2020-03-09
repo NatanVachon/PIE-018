@@ -159,11 +159,11 @@ def globalPlot(energy, tete_fixe=None, tete_fixe_aoi=None, traffic_search=None, 
     # Legend
     energy_patch = pcs.Patch(color=energy_color, label='Energy')
     tete_fixe_patch = pcs.Patch(color=tete_fixe_color, label='Fix head')
+    tete_fixe_aoi_patch = pcs.Patch(color=tete_fixe_aoi_color, label='Fix head AOI')
     traffic_search_patch = pcs.Patch(color=traffic_search_color, label='Traffic search')
     turn_patch = pcs.Patch(color=turn_color, label='Turns')
-    ax.legend(handles=[energy_patch, tete_fixe_patch, traffic_search_patch, turn_patch])
+    ax.legend(handles=[energy_patch, tete_fixe_patch, tete_fixe_aoi_patch, traffic_search_patch, turn_patch])
 
     ax.set_title("Energy / turns / fix heads")
-
     ax.grid()
     plt.show()
